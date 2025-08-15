@@ -40,25 +40,23 @@ renderer.domElement.addEventListener('mousemove', (e) => {
   if (isDragging) {
     cupGroup.rotation.y += e.movementX * 0.01;
     cupGroup.rotation.x += e.movementY * 0.01;
+    cupGroup.rotation.z += e.movementX * 0.005; // slight z rotation too
   }
 });
 
-// Scroll rotation
-let lastScrollY = window.scrollY;
-window.addEventListener('scroll', () => {
-  const delta = window.scrollY - lastScrollY;
-  cupGroup.rotation.x += delta * 0.003;
-  lastScrollY = window.scrollY;
-});
+// Scroll rotation (X-axis only)
+function updateCupScrollRotation() {
+  const scrollFraction = window.scrollY / (document.body.scrollHeight - window.innerHeight);
+  const maxRotation = Math.PI / 1.8; // increased for more tilt
+  cupGroup.rotation.x = scrollFraction * maxRotation;
+}
+
+window.addEventListener('scroll', updateCupScrollRotation);
 
 // Responsive scaling with limits
 function resizeCup() {
-  // Base scale proportional to screen width/height
   const baseScale = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
-  
-  // Clamp scale to medium-small / medium-large
   const scaleFactor = Math.min(Math.max(baseScale, 0.8), 1.4);
-  
   cupGroup.scale.set(scaleFactor, scaleFactor, scaleFactor);
 
   camera.aspect = window.innerWidth / window.innerHeight;
