@@ -46,3 +46,33 @@ canvas#coffee-cup-canvas {
   right: 5%;
   text-align: right;
 }
+.coffee-menu-section {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 50px 10px;
+  background-color: #f5f1eb;
+}
+
+.coffee-card {
+  width: 200px;
+  background: #fffaf0;
+  border-radius: 15px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  text-align: center;
+  padding: 15px;
+  cursor: pointer;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.coffee-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+
+.coffee-card img {
+  width: 100%;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
