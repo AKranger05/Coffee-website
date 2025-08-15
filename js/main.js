@@ -1,75 +1,77 @@
-let scene, camera, renderer, cup;
+// Scene setup
+const canvas = document.getElementById('coffee-cup-canvas');
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+camera.position.z = 10;
 
-init();
-animate();
+const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true });
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(window.devicePixelRatio);
 
-function init() {
-  // Scene & Camera
-  scene = new THREE.Scene();
-  camera = new THREE.PerspectiveCamera(45, window.innerWidth/window.innerHeight, 0.1, 1000);
-  camera.position.z = 5;
+// Cup setup
+const cupGroup = new THREE.Group();
 
-  // Renderer
-  renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('coffee-cup-canvas'), alpha: true });
-  renderer.setSize(300, 300);
+// Body
+const bodyGeo = new THREE.CylinderGeometry(1, 1, 4, 32);
+const bodyMat = new THREE.MeshStandardMaterial({ color: 0xD2B48C });
+const bodyMesh = new THREE.Mesh(bodyGeo, bodyMat);
+cupGroup.add(bodyMesh);
 
-  // Simple 3D Cup (Cylinder + Hemisphere for top)
-  const cupMaterial = new THREE.MeshStandardMaterial({ color: 0x6f4e37, metalness: 0.3, roughness: 0.7 });
+// Head
+const headGeo = new THREE.CylinderGeometry(1, 1, 0.6, 32);
+const headMat = new THREE.MeshStandardMaterial({ color: 0x8B4513 });
+const headMesh = new THREE.Mesh(headGeo, headMat);
+headMesh.position.y = 2.3;
+cupGroup.add(headMesh);
 
-  const cupBody = new THREE.Mesh(new THREE.CylinderGeometry(0.5, 0.5, 1, 32), cupMaterial);
-  cupBody.position.y = -0.25;
+scene.add(cupGroup);
 
-  const coffeeTop = new THREE.Mesh(new THREE.SphereGeometry(0.5, 32, 16, 0, Math.PI * 2, 0, Math.PI/2), new THREE.MeshStandardMaterial({ color: 0x4b3621 }));
-  coffeeTop.position.y = 0.25;
+// Lighting
+const light = new THREE.DirectionalLight(0xffffff, 1);
+light.position.set(5, 10, 7.5);
+scene.add(light);
 
-  cup = new THREE.Group();
-  cup.add(cupBody);
-  cup.add(coffeeTop);
-  scene.add(cup);
+// Drag rotation
+let isDragging = false;
+renderer.domElement.addEventListener('mousedown', () => isDragging = true);
+renderer.domElement.addEventListener('mouseup', () => isDragging = false);
+renderer.domElement.addEventListener('mouseleave', () => isDragging = false);
+renderer.domElement.addEventListener('mousemove', (e) => {
+  if (isDragging) {
+    cupGroup.rotation.y += e.movementX * 0.01;
+    cupGroup.rotation.x += e.movementY * 0.01;
+  }
+});
 
-  // Lights
-  const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
-  scene.add(ambientLight);
-  const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
-  directionalLight.position.set(5,5,5);
-  scene.add(directionalLight);
+// Scroll rotation
+let lastScrollY = window.scrollY;
+window.addEventListener('scroll', () => {
+  const delta = window.scrollY - lastScrollY;
+  cupGroup.rotation.x += delta * 0.003;
+  lastScrollY = window.scrollY;
+});
 
-  // Drag rotation
-  let isDragging = false;
-  let previousX;
+// Responsive scaling with limits
+function resizeCup() {
+  // Base scale proportional to screen width/height
+  const baseScale = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
+  
+  // Clamp scale to medium-small / medium-large
+  const scaleFactor = Math.min(Math.max(baseScale, 0.8), 1.4);
+  
+  cupGroup.scale.set(scaleFactor, scaleFactor, scaleFactor);
 
-  renderer.domElement.addEventListener('mousedown', (e) => {
-    isDragging = true;
-    previousX = e.clientX;
-    renderer.domElement.style.cursor = 'grabbing';
-  });
-
-  window.addEventListener('mouseup', () => {
-    isDragging = false;
-    renderer.domElement.style.cursor = 'grab';
-  });
-
-  window.addEventListener('mousemove', (e) => {
-    if(isDragging){
-      const deltaX = e.clientX - previousX;
-      cup.rotation.y += deltaX * 0.01;
-      previousX = e.clientX;
-    }
-  });
-
-  // Scroll rotation
-  window.addEventListener('scroll', () => {
-    cup.rotation.y += window.scrollY * 0.0005;
-  });
-
-  // Resize
-  window.addEventListener('resize', () => {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-  });
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
 }
 
+// Animate
 function animate() {
   requestAnimationFrame(animate);
   renderer.render(scene, camera);
 }
+animate();
+
+window.addEventListener('resize', resizeCup);
+resizeCup();

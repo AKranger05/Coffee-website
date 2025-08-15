@@ -1,78 +1,96 @@
 body, html {
   margin: 0;
   padding: 0;
-  height: 100%;
   font-family: sans-serif;
   background-color: #f5f1eb;
 }
 
-.homepage-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
+.page-container {
+  position: relative;
 }
 
+/* Home text */
+.home-text {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 5vw;
+}
+
+.left-text, .right-text {
+  max-width: 25vw;
+  color: #3e2723;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5vh;
+  font-size: 1.2vw;
+  line-height: 1.6;
+}
+
+/* Cup canvas */
+canvas#coffee-cup-canvas {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 60vw;
+  height: 60vh;
+  cursor: grab;
+  z-index: 5;
+}
+
+/* Scroll hint */
+.scroll-hint {
+  position: absolute;
+  bottom: 3vh;
+  width: 100%;
+  text-align: center;
+  color: #3e2723;
+  font-size: 1.5vw;
+  z-index: 0;
+}
+
+/* Coffee section */
 .coffee-section {
   position: relative;
-  width: 100%;
-  height: 100vh;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  justify-content: space-between;
+  padding: 100vh 5vw 20vh;
+  gap: 3vw;
 }
 
-canvas#coffee-cup-canvas {
-  width: 300px;
-  height: 300px;
-  cursor: grab;
-}
-
-.coffee-text {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 25%;
-  padding: 10px;
-  color: #3e2723;
-}
-
-.coffee-text.left {
-  left: 5%;
-  text-align: left;
-}
-
-.coffee-text.right {
-  right: 5%;
-  text-align: right;
-}
-.coffee-menu-section {
+.coffee-options-left, .coffee-options-right {
   display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 20px;
-  padding: 50px 10px;
-  background-color: #f5f1eb;
+  flex-direction: row;
+  gap: 2vw;
+}
+
+.coffee-column {
+  display: flex;
+  flex-direction: column;
+  gap: 3vh;
 }
 
 .coffee-card {
-  width: 200px;
+  width: 15vw;
   background: #fffaf0;
-  border-radius: 15px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  border-radius: 1vw;
+  box-shadow: 0 0.4vw 1.2vw rgba(0,0,0,0.1);
   text-align: center;
-  padding: 15px;
+  padding: 1vw;
   cursor: pointer;
   transition: transform 0.3s, box-shadow 0.3s;
 }
 
 .coffee-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+  transform: translateY(-0.5vw);
+  box-shadow: 0 0.8vw 2vw rgba(0,0,0,0.2);
 }
 
 .coffee-card img {
   width: 100%;
-  border-radius: 10px;
-  margin-bottom: 10px;
+  border-radius: 0.5vw;
+  margin-bottom: 1vw;
 }
