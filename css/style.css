@@ -1,4 +1,4 @@
-/* Reset & body styling */
+/* Reset and base styles */
 * {
   margin: 0;
   padding: 0;
@@ -6,132 +6,86 @@
 }
 
 body {
-  font-family: 'Poppins', sans-serif;
-  background-color: #fefcf9;
-  color: #2d2d2d;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f8f4f0;
+  color: #3e2c23;
   overflow-x: hidden;
 }
 
-/* Hero Section */
+/* Hero section */
 .hero {
   height: 100vh;
+  background: url('../images/coffee-bg.jpg') center/cover no-repeat;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  text-align: center;
-  background: linear-gradient(135deg, #fceabb, #f8b500);
-  padding: 0 2rem;
   position: relative;
-  overflow: hidden;
-}
-
-.hero h1 {
-  font-size: 4rem;
-  font-weight: 700;
-  margin-bottom: 1rem;
-  transform: translateY(0);
-  transition: transform 0.6s ease;
-}
-
-.hero p {
-  font-size: 1.5rem;
-  margin-bottom: 2rem;
-}
-
-.hero-btn {
-  padding: 0.8rem 2rem;
-  border: none;
-  border-radius: 50px;
-  background-color: #2b2b2b;
-  color: #fff;
-  font-size: 1rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.3s ease;
-  animation: float 3s ease-in-out infinite;
-}
-
-.hero-btn:hover {
-  background-color: #5a4636;
-  transform: scale(1.05);
-}
-
-/* Floating animation for hero button */
-@keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
-}
-
-/* Menu Section */
-.menu {
-  padding: 5rem 2rem;
-  background-color: #fff;
   text-align: center;
 }
 
-.menu-title {
-  font-size: 2.5rem;
-  font-weight: 700;
-  margin-bottom: 3rem;
-  color: #2b2b2b;
+.hero-content h1 {
+  font-size: 3rem;
+  margin-bottom: 0.5rem;
+  animation: fadeIn 1.5s ease-in-out;
 }
 
-.menu-items {
-  display: flex;
-  justify-content: center;
-  gap: 2rem;
-  flex-wrap: wrap;
+.hero-content p {
+  font-size: 1.2rem;
+  animation: fadeIn 2s ease-in-out;
 }
 
-.menu-card {
-  background: #fdf5e6;
-  border-radius: 1.5rem;
-  padding: 1.5rem;
-  width: 280px;
-  box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  transform-style: preserve-3d;
+/* Steam animation */
+.steam {
+  position: absolute;
+  top: 40%;
+  width: 60px;
+  height: 60px;
+  background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
+  animation: steamRise 3s infinite ease-in-out;
 }
 
-.menu-card:hover {
-  transform: rotateX(5deg) rotateY(5deg) translateY(-8px);
-  box-shadow: 0 12px 20px rgba(0,0,0,0.2);
+@keyframes steamRise {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translateY(-30px) scale(1.2);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(-60px) scale(0.8);
+    opacity: 0;
+  }
 }
 
-.menu-card img {
-  width: 100%;
-  border-radius: 1rem;
-  transition: transform 0.3s ease;
-}
-
-.menu-card img:hover {
-  transform: scale(1.05);
-}
-
-.menu-card h3 {
-  font-size: 1.5rem;
-  margin: 1rem 0 0.5rem;
-}
-
-.menu-card p {
-  font-size: 1rem;
-  color: #5a4636;
-  margin-bottom: 1rem;
-}
-
-.menu-btn {
-  padding: 0.6rem 1.5rem;
-  border: none;
-  border-radius: 50px;
-  background-color: #2b2b2b;
+/* Scroll indicator */
+.scroll-indicator {
+  position: absolute;
+  bottom: 20px;
+  font-size: 2rem;
+  animation: bounce 2s infinite;
   color: #fff;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-.menu-btn:hover {
-  background-color: #5a4636;
-  transform: scale(1.05);
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(10px);
+  }
+}
+
+/* Fade in animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
