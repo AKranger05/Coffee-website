@@ -1,74 +1,46 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Café — Home</title>
-  <link rel="stylesheet" href="css/style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Brew Haven - Home</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-<div class="page-container">
-
-  <!-- Home text -->
-  <section class="home-text">
-    <div class="left-text">
-      <h1>Welcome to Our Café</h1>
-      <p>Start your day with the perfect coffee. Our café offers a wide variety of beans freshly roasted each morning, ensuring the richest aroma and flavor with every cup.</p>
-      <p>Relax in our cozy environment designed to make you feel at home. Whether reading a book or catching up with friends, every corner invites comfort and warmth.</p>
-      <p>Our baristas are passionate about their craft, always ready to recommend the perfect blend, and create artful latte designs that will make your experience memorable.</p>
-      <p>We also host small coffee workshops and tastings, so you can deepen your knowledge and appreciation of coffee in an engaging and friendly setting.</p>
-    </div>
-
-    <div class="right-text">
-      <h1>Our Coffee Collection</h1>
-      <p>Explore the finest blends sourced from around the world. From bold and rich Espressos to smooth and creamy Lattes, our collection caters to every taste.</p>
-      <p>We feature seasonal specials, single-origin beans, and experimental brews that highlight unique flavor profiles, giving you a taste journey with every visit.</p>
-      <p>Enjoy carefully crafted beverages that balance aroma, body, and flavor. Each cup is brewed to perfection, reflecting our dedication to quality and excellence.</p>
-      <p>Discover the art of coffee preparation and expand your palate with our diverse menu of beverages, each served with love and attention to detail.</p>
-    </div>
-
-    <!-- Cup -->
-    <canvas id="coffee-cup-canvas"></canvas>
-
-    <!-- Scroll hint -->
-    <div class="scroll-hint">
-      <p>Scroll to see our collection ↓</p>
-    </div>
+  
+  <!-- Hero Section -->
+  <section class="hero">
+    <h1>Brew Haven</h1>
+    <p>Your daily dose of coffee magic ☕✨</p>
+    <button class="hero-btn">Explore Menu</button>
   </section>
 
-  <!-- Coffee section -->
-  <section class="coffee-section">
-    <div class="coffee-options-left">
-      <div class="coffee-column">
-        <div class="coffee-card"><img src="images/espresso.png" alt="Espresso"><h3>Espresso</h3><p>Strong, bold, energizing.</p></div>
-        <div class="coffee-card"><img src="images/latte.png" alt="Latte"><h3>Latte</h3><p>Creamy and smooth.</p></div>
-        <div class="coffee-card"><img src="images/cappuccino.png" alt="Cappuccino"><h3>Cappuccino</h3><p>Classic Italian froth.</p></div>
+  <!-- Menu Section -->
+  <section class="menu" id="menu">
+    <h2 class="menu-title">Our Brews</h2>
+    <div class="menu-items">
+      <div class="menu-card">
+        <img src="https://source.unsplash.com/300x300/?coffee,latte" alt="Latte">
+        <h3>Latte</h3>
+        <p>Creamy, smooth, and comforting ☁️</p>
+        <button class="menu-btn">Learn More</button>
       </div>
-      <div class="coffee-column">
-        <div class="coffee-card"><img src="images/mocha.png" alt="Mocha"><h3>Mocha</h3><p>Chocolatey delight.</p></div>
-        <div class="coffee-card"><img src="images/americano.png" alt="Americano"><h3>Americano</h3><p>Simple and elegant.</p></div>
-        <div class="coffee-card"><img src="images/macchiato.png" alt="Macchiato"><h3>Macchiato</h3><p>Espresso with foam.</p></div>
+      <div class="menu-card">
+        <img src="https://source.unsplash.com/300x300/?coffee,espresso" alt="Espresso">
+        <h3>Espresso</h3>
+        <p>Bold, intense, and full of energy ⚡</p>
+        <button class="menu-btn">Learn More</button>
       </div>
-    </div>
-
-    <div class="coffee-options-right">
-      <div class="coffee-column">
-        <div class="coffee-card"><img src="images/flatwhite.png" alt="Flat White"><h3>Flat White</h3><p>Smooth microfoam.</p></div>
-        <div class="coffee-card"><img src="images/irish.png" alt="Irish Coffee"><h3>Irish Coffee</h3><p>Whiskey & coffee mix.</p></div>
-        <div class="coffee-card"><img src="images/ristretto.png" alt="Ristretto"><h3>Ristretto</h3><p>Short & intense.</p></div>
-      </div>
-      <div class="coffee-column">
-        <div class="coffee-card"><img src="images/caféauLait.png" alt="Café au Lait"><h3>Café au Lait</h3><p>Equal parts coffee & milk.</p></div>
-        <div class="coffee-card"><img src="images/breve.png" alt="Breve"><h3>Breve</h3><p>Espresso with half & half.</p></div>
-        <div class="coffee-card"><img src="images/affogato.png" alt="Affogato"><h3>Affogato</h3><p>Espresso over ice cream.</p></div>
+      <div class="menu-card">
+        <img src="https://source.unsplash.com/300x300/?coffee,cappuccino" alt="Cappuccino">
+        <h3>Cappuccino</h3>
+        <p>Rich, foamy, and irresistible ☕</p>
+        <button class="menu-btn">Learn More</button>
       </div>
     </div>
   </section>
 
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/three@0.153.0/build/three.min.js"></script>
-<script src="js/main.js"></script>
+  <script src="main.js"></script>
 </body>
 </html>
