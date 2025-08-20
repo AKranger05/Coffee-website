@@ -60,21 +60,69 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Menu item click handlers
+    // Menu item click handlers - Updated to handle new buttons
     document.querySelectorAll('.menu-item').forEach(item => {
-        item.addEventListener('click', function() {
+        // Remove the old click handler for the entire menu item
+        // We'll handle button clicks individually now
+    });
+
+    // Learn More button handlers
+    document.querySelectorAll('.learn-more-btn').forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.stopPropagation(); // Prevent event bubbling
             const coffeeType = this.getAttribute('data-coffee');
-            const coffeeName = this.querySelector('h3').textContent;
+            const coffeeItem = this.closest('.menu-item');
+            const coffeeName = coffeeItem.querySelector('h3').textContent;
             
-            // Add subtle click animation
-            this.style.transform = 'scale(0.98)';
+            // Add click animation
+            this.style.transform = 'scale(0.95)';
             setTimeout(() => {
                 this.style.transform = '';
             }, 150);
             
-            // You can add navigation to individual coffee pages here later
-            alert(`You clicked on ${coffeeName}! Individual coffee pages will be added later.`);
-            console.log(`Clicked on ${coffeeType}`);
+            // You can add navigation to individual coffee pages here
+            alert(`Learn More about ${coffeeName}! Individual coffee pages will be added later.`);
+            console.log(`Learn More clicked for: ${coffeeType}`);
+        });
+    });
+
+    // Order Now button handlers
+    document.querySelectorAll('.order-now-btn').forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.stopPropagation(); // Prevent event bubbling
+            const coffeeType = this.getAttribute('data-coffee');
+            const coffeeItem = this.closest('.menu-item');
+            const coffeeName = coffeeItem.querySelector('h3').textContent;
+            const price = coffeeItem.querySelector('.price').textContent;
+            
+            // Add click animation
+            this.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                this.style.transform = '';
+            }, 150);
+            
+            // You can add cart functionality here later
+            alert(`${coffeeName} added to cart! Price: ${price}`);
+            console.log(`Order Now clicked for: ${coffeeType}`);
+        });
+    });
+
+    // Footer link handlers (placeholder for future pages)
+    document.querySelectorAll('.footer-link').forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const href = this.getAttribute('href');
+            const linkText = this.textContent;
+            
+            // Add click animation
+            this.style.transform = 'translateX(10px)';
+            setTimeout(() => {
+                this.style.transform = '';
+            }, 200);
+            
+            // Placeholder for future page navigation
+            alert(`${linkText} page will be added later!`);
+            console.log(`Footer link clicked: ${href}`);
         });
     });
 
@@ -208,6 +256,83 @@ document.addEventListener('DOMContentLoaded', function() {
             scrollIndicator.style.transform = 'translateX(-50%) translateY(0)';
         }
     });
+
+    // Button interaction enhancements
+    function addButtonRippleEffect(button, event) {
+        const rect = button.getBoundingClientRect();
+        const ripple = document.createElement('span');
+        const size = Math.max(rect.width, rect.height);
+        const x = event.clientX - rect.left - size / 2;
+        const y = event.clientY - rect.top - size / 2;
+        
+        ripple.style.cssText = `
+            position: absolute;
+            width: ${size}px;
+            height: ${size}px;
+            left: ${x}px;
+            top: ${y}px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            transform: scale(0);
+            animation: ripple 0.6s ease-out;
+            pointer-events: none;
+        `;
+        
+        // Add ripple animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes ripple {
+                to { transform: scale(2); opacity: 0; }
+            }
+        `;
+        if (!document.querySelector('[data-ripple-style]')) {
+            style.setAttribute('data-ripple-style', 'true');
+            document.head.appendChild(style);
+        }
+        
+        button.style.position = 'relative';
+        button.style.overflow = 'hidden';
+        button.appendChild(ripple);
+        
+        setTimeout(() => {
+            ripple.remove();
+        }, 600);
+    }
+
+    // Add ripple effect to all buttons
+    document.querySelectorAll('.learn-more-btn, .order-now-btn').forEach(button => {
+        button.addEventListener('click', function(e) {
+            addButtonRippleEffect(this, e);
+        });
+    });
+
+    // Smooth footer animation on scroll
+    const footerObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const footerColumns = entry.target.querySelectorAll('.footer-column');
+                footerColumns.forEach((column, index) => {
+                    setTimeout(() => {
+                        column.style.opacity = '1';
+                        column.style.transform = 'translateY(0)';
+                    }, index * 200);
+                });
+            }
+        });
+    }, { threshold: 0.2 });
+
+    const footerSection = document.querySelector('.footer-section');
+    if (footerSection) {
+        // Initially hide footer columns
+        const footerColumns = footerSection.querySelectorAll('.footer-column');
+        footerColumns.forEach(column => {
+            column.style.opacity = '0';
+            column.style.transform = 'translateY(30px)';
+            column.style.transition = 'all 0.6s ease';
+        });
+        
+        footerObserver.observe(footerSection);
+    }
 
 });
 
