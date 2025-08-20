@@ -7,35 +7,45 @@ import './App.css'
 
 function App() {
   const [isMenuVisible, setIsMenuVisible] = useState(false)
-  const menuRef = useRef(null)
+  const menuTriggerRef = useRef(null)
+  const menuSectionRef = useRef(null)
+
+  const scrollToMenu = () => {
+    if (menuSectionRef.current) {
+      menuSectionRef.current.scrollIntoView({ behavior: 'smooth' })
+    }
+  }
 
   useEffect(() => {
-    const checkMenuVisibility = () => {
-      if (menuRef.current) {
-        const rect = menuRef.current.getBoundingClientRect()
-        // Show menu when it's in the viewport
-        if (rect.top < window.innerHeight - 100) {
+    const handleScroll = () => {
+      if (menuTriggerRef.current) {
+        const triggerPosition = menuTriggerRef.current.getBoundingClientRect().top
+        if (triggerPosition < window.innerHeight * 0.8) {
           setIsMenuVisible(true)
         }
       }
     }
 
-    // Check on scroll and on initial load
-    window.addEventListener('scroll', checkMenuVisibility)
-    checkMenuVisibility() // Check immediately on load
+    window.addEventListener('scroll', handleScroll)
+    // Check on initial load
+    handleScroll()
 
-    return () => window.removeEventListener('scroll', checkMenuVisibility)
+    return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
   return (
     <div className="App">
       <Header />
-      <Hero />
+      <Hero scrollToMenu={scrollToMenu} />
       
-      {/* This div will trigger the menu to appear */}
-      <div ref={menuRef} style={{height: '10px', position: 'absolute', top: '80vh'}}></div>
+      {/* Invisible trigger element to detect when to show menu */}
+      <div ref={menuTriggerRef} className="menu-trigger"></div>
       
-      {isMenuVisible && <MenuGrid />}
+      {/* Menu with animation */}
+      <div ref={menuSectionRef} className={`menu-container ${isMenuVisible ? 'visible' : ''}`}>
+        <MenuGrid />
+      </div>
+      
       <Footer />
     </div>
   )

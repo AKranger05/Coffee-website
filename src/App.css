@@ -16,6 +16,21 @@
   --text-light: #5A5A5A;
 }
 
+/* Global Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  color: var(--text);
+  overflow-x: hidden;
+  background-color: var(--light);
+  line-height: 1.6;
+}
+
 /* Header Styles */
 .header {
   position: fixed;
@@ -578,6 +593,164 @@
   }
 }
 
+/* Menu trigger */
+.menu-trigger {
+  position: absolute;
+  top: 70vh;
+  height: 10px;
+  width: 100%;
+}
+
+/* Menu container with animation */
+.menu-container {
+  opacity: 0;
+  transform: translateY(50px);
+  transition: all 0.8s cubic-bezier(0.215, 0.610, 0.355, 1.000);
+}
+
+.menu-container.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Enhanced coffee card animations */
+.menu-container .coffee-card {
+  opacity: 0;
+  transform: translateY(30px) scale(0.95);
+  transition: all 0.6s cubic-bezier(0.215, 0.610, 0.355, 1.000);
+}
+
+.menu-container.visible .coffee-card {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* Staggered animation for coffee cards */
+.menu-container.visible .coffee-card:nth-child(1) { transition-delay: 0.1s; }
+.menu-container.visible .coffee-card:nth-child(2) { transition-delay: 0.2s; }
+.menu-container.visible .coffee-card:nth-child(3) { transition-delay: 0.3s; }
+.menu-container.visible .coffee-card:nth-child(4) { transition-delay: 0.4s; }
+.menu-container.visible .coffee-card:nth-child(5) { transition-delay: 0.5s; }
+.menu-container.visible .coffee-card:nth-child(6) { transition-delay: 0.6s; }
+.menu-container.visible .coffee-card:nth-child(7) { transition-delay: 0.7s; }
+.menu-container.visible .coffee-card:nth-child(8) { transition-delay: 0.8s; }
+.menu-container.visible .coffee-card:nth-child(9) { transition-delay: 0.9s; }
+
+/* Enhanced hero animations */
+.hero-title {
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeInUp 1s ease-out 0.5s forwards;
+}
+
+.hero-subtitle {
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeInUp 1s ease-out 0.8s forwards;
+}
+
+.cta-button {
+  opacity: 0;
+  transform: translateY(30px) scale(0.9);
+  animation: fadeInUp 1s ease-out 1.1s forwards, pulse 2s ease-in-out 2.5s infinite;
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+/* Enhanced coffee image animation */
+.coffee-image {
+  overflow: hidden;
+}
+
+.coffee-emoji {
+  transform: scale(0.8);
+  transition: all 0.5s cubic-bezier(0.215, 0.610, 0.355, 1.000);
+}
+
+.coffee-card:hover .coffee-emoji {
+  transform: scale(1.1) rotate(5deg);
+}
+
+/* Floating animation for hero elements */
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  33% { transform: translateY(-5px) rotate(1deg); }
+  66% { transform: translateY(5px) rotate(-1deg); }
+}
+
+.hero-title span {
+  display: inline-block;
+  animation: float 6s ease-in-out infinite;
+}
+
+/* Button hover effects */
+.learn-more-btn, .order-now-btn {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.learn-more-btn::before, .order-now-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.learn-more-btn:hover::before, .order-now-btn:hover::before {
+  left: 100%;
+}
+
+/* Enhanced scroll indicator */
+.scroll-indicator {
+  opacity: 0;
+  animation: fadeIn 1s ease-out 1.5s forwards;
+}
+
+@keyframes fadeIn {
+  to { opacity: 1; }
+}
+
+.bounce {
+  animation: bounce 2s infinite 2s;
+}
+
+/* Background pattern animation */
+.hero::before {
+  animation: rotateGradient 20s linear infinite;
+}
+
+/* Navbar animation on scroll */
+.header {
+  transition: all 0.4s cubic-bezier(0.215, 0.610, 0.355, 1.000);
+}
+
+/* Footer animation */
+.footer {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.6s ease;
+}
+
+.footer.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 /* Responsive Design */
 @media (max-width: 968px) {
   .hero-title {
@@ -643,6 +816,10 @@
     grid-template-columns: 1fr;
     gap: 2.5rem;
     text-align: center;
+  }
+
+  .menu-container.visible .coffee-card {
+    transition-delay: 0.1s !important;
   }
 }
 

@@ -1,8 +1,32 @@
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 const Footer = () => {
+  const [isVisible, setIsVisible] = useState(false)
+  const footerRef = useRef(null)
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true)
+        }
+      },
+      { threshold: 0.1 }
+    )
+
+    if (footerRef.current) {
+      observer.observe(footerRef.current)
+    }
+
+    return () => {
+      if (footerRef.current) {
+        observer.unobserve(footerRef.current)
+      }
+    }
+  }, [])
+
   return (
-    <footer className="footer">
+    <footer className={`footer ${isVisible ? 'visible' : ''}`} ref={footerRef}>
       <div className="footer-content">
         <div className="footer-section">
           <h3>About Us</h3>
