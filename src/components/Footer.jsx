@@ -24,7 +24,7 @@ const Footer = () => {
       </div>
       
       <div className="footer-bottom">
-        <p>&copy; 2023 Brew Haven Coffee. All rights reserved.</p>
+        <p>&copy; 2023 BrewCraft Coffee. All rights reserved.</p>
       </div>
     </footer>
   )

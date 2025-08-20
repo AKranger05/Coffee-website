@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
 * {
   margin: 0;
@@ -8,9 +8,10 @@
 
 body {
   font-family: 'Inter', sans-serif;
-  color: #2A2A2A;
+  color: #2B2B2B;
   overflow-x: hidden;
-  background-color: #faf7f2;
+  background-color: #F4F1DE;
+  line-height: 1.6;
 }
 
 html {
@@ -19,7 +20,7 @@ html {
 
 /* Custom scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 10px;
 }
 
 ::-webkit-scrollbar-track {
@@ -27,10 +28,80 @@ html {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #8B4513;
-  border-radius: 10px;
+  background: #E57A44;
+  border-radius: 5px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #6B3100;
+  background: #D26937;
+}
+
+/* Selection color */
+::selection {
+  background: rgba(229, 122, 68, 0.3);
+}
+
+/* Focus styles */
+button:focus,
+a:focus {
+  outline: 2px solid #E57A44;
+  outline-offset: 2px;
+}
+
+/* Smooth transitions for all interactive elements */
+a, button {
+  transition: all 0.3s ease;
+}@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  color: #2B2B2B;
+  overflow-x: hidden;
+  background-color: #F4F1DE;
+  line-height: 1.6;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #E57A44;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #D26937;
+}
+
+/* Selection color */
+::selection {
+  background: rgba(229, 122, 68, 0.3);
+}
+
+/* Focus styles */
+button:focus,
+a:focus {
+  outline: 2px solid #E57A44;
+  outline-offset: 2px;
+}
+
+/* Smooth transitions for all interactive elements */
+a, button {
+  transition: all 0.3s ease;
 }
