@@ -1,9 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React from 'react'
 
 const MenuGrid = () => {
-  const [isVisible, setIsVisible] = useState(false)
-  const menuRef = useRef(null)
-
   const coffeeItems = [
     { 
       id: 1, 
@@ -70,27 +67,6 @@ const MenuGrid = () => {
     }
   ]
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true)
-        }
-      },
-      { threshold: 0.1 }
-    )
-
-    if (menuRef.current) {
-      observer.observe(menuRef.current)
-    }
-
-    return () => {
-      if (menuRef.current) {
-        observer.unobserve(menuRef.current)
-      }
-    }
-  }, [])
-
   const handleLearnMore = (coffeeName) => {
     alert(`Learn More about ${coffeeName}! Individual coffee pages will be added later.`)
   }
@@ -100,25 +76,13 @@ const MenuGrid = () => {
   }
 
   return (
-    <section 
-      ref={menuRef} 
-      className="menu-section"
-      id="menu"
-    >
+    <section className="menu-section" id="menu">
       <h2 className="section-title">Our Coffee Collection</h2>
       <p className="section-subtitle">Expertly crafted coffee drinks, made fresh daily with premium ingredients</p>
       
       <div className="menu-grid">
-        {coffeeItems.map((item, index) => (
-          <div 
-            key={item.id} 
-            className="coffee-card"
-            style={{ 
-              animationDelay: isVisible ? `${index * 0.1}s` : '0s',
-              animation: isVisible ? 'fadeIn 0.8s ease-out forwards' : 'none',
-              opacity: isVisible ? 1 : 0
-            }}
-          >
+        {coffeeItems.map((item) => (
+          <div key={item.id} className="coffee-card">
             <div className="coffee-image">
               <span className="coffee-emoji">{item.emoji}</span>
             </div>
