@@ -1,21 +1,103 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Coffee Craze</title>
-  <link rel="stylesheet" href="css/style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BrewCraft Coffee</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <header class="hero">
-    <div class="hero-content">
-      <h1>Welcome to Brew Haven ☕</h1>
-      <p>Your daily dose of brewed brilliance</p>
-    </div>
-    <div class="steam"></div>
-    <div class="scroll-indicator">↓</div>
-  </header>
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="nav-container">
+            <div class="logo">BrewCraft</div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#cart">Cart</a></li>
+                <li><a href="#checkout">Checkout</a></li>
+                <li><a href="#tracking">Order Tracking</a></li>
+                <li><a href="#signin">Sign In</a></li>
+            </ul>
+        </div>
+    </nav>
 
-  <script src="js/main.js"></script>
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1>Premium Coffee Experience</h1>
+            <p>Discover the finest crafted coffee drinks from around the world, made to perfection</p>
+            <a href="#menu" class="cta-button">Explore Our Collection</a>
+        </div>
+        <div class="scroll-indicator">
+            <p>Scroll to see our collection</p>
+            <div class="scroll-arrow"></div>
+        </div>
+    </section>
+
+    <!-- Coffee Menu Section -->
+    <section class="menu-section" id="menu">
+        <div class="menu-title">
+            <h2>Our Coffee Collection</h2>
+            <p>Expertly crafted coffee drinks, made fresh daily with premium ingredients</p>
+        </div>
+        <div class="menu-grid">
+            <div class="menu-item" data-coffee="espresso">
+                <span class="coffee-emoji">☕</span>
+                <h3>Classic Espresso</h3>
+                <p>Rich, bold, and intense. Our signature espresso shot with notes of dark chocolate and caramel.</p>
+                <div class="price">$3.99</div>
+            </div>
+            <div class="menu-item" data-coffee="americano">
+                <span class="coffee-emoji">☕</span>
+                <h3>Smooth Americano</h3>
+                <p>A perfect balance of strength and smoothness. Espresso with hot water for all-day sipping.</p>
+                <div class="price">$4.49</div>
+            </div>
+            <div class="menu-item" data-coffee="latte">
+                <span class="coffee-emoji">🥛</span>
+                <h3>Creamy Latte</h3>
+                <p>Silky steamed milk meets our premium espresso for a luxurious coffee experience.</p>
+                <div class="price">$5.99</div>
+            </div>
+            <div class="menu-item" data-coffee="cappuccino">
+                <span class="coffee-emoji">☕</span>
+                <h3>Frothy Cappuccino</h3>
+                <p>Traditional Italian cappuccino with the perfect foam-to-coffee ratio and rich flavor.</p>
+                <div class="price">$5.49</div>
+            </div>
+            <div class="menu-item" data-coffee="mocha">
+                <span class="coffee-emoji">🍫</span>
+                <h3>Decadent Mocha</h3>
+                <p>Rich chocolate syrup meets premium coffee in this indulgent sweet treat.</p>
+                <div class="price">$6.49</div>
+            </div>
+            <div class="menu-item" data-coffee="macchiato">
+                <span class="coffee-emoji">⭐</span>
+                <h3>Elegant Macchiato</h3>
+                <p>Espresso marked with a dollop of foamed milk. Simple perfection in every sip.</p>
+                <div class="price">$5.79</div>
+            </div>
+            <div class="menu-item" data-coffee="coldbrew">
+                <span class="coffee-emoji">🧊</span>
+                <h3>Cold Brew</h3>
+                <p>Smooth, refreshing, and naturally sweet. Perfect iced coffee for hot summer days.</p>
+                <div class="price">$4.99</div>
+            </div>
+            <div class="menu-item" data-coffee="frappe">
+                <span class="coffee-emoji">🥤</span>
+                <h3>Iced Frappé</h3>
+                <p>Blended iced coffee with whipped cream and rich flavor. A cool refreshing treat.</p>
+                <div class="price">$6.99</div>
+            </div>
+            <div class="menu-item" data-coffee="flatwhite">
+                <span class="coffee-emoji">☕</span>
+                <h3>Flat White</h3>
+                <p>Smooth microfoam and double shot espresso. A modern coffee classic from down under.</p>
+                <div class="price">$5.29</div>
+            </div>
+        </div>
+    </section>
+
+    <script src="js/main.js"></script>
 </body>
 </html>
