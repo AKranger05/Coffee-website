@@ -7,45 +7,49 @@ import './App.css'
 
 function App() {
   const [isMenuVisible, setIsMenuVisible] = useState(false)
-  const menuTriggerRef = useRef(null)
-  const menuSectionRef = useRef(null)
-
-  const scrollToMenu = () => {
-    if (menuSectionRef.current) {
-      menuSectionRef.current.scrollIntoView({ behavior: 'smooth' })
-    }
-  }
+  const menuRef = useRef(null)
 
   useEffect(() => {
-    const handleScroll = () => {
-      if (menuTriggerRef.current) {
-        const triggerPosition = menuTriggerRef.current.getBoundingClientRect().top
-        if (triggerPosition < window.innerHeight * 0.8) {
+    const checkMenuVisibility = () => {
+      if (menuRef.current) {
+        const rect = menuRef.current.getBoundingClientRect()
+        // Show menu when it's 200px before it comes into view
+        if (rect.top < window.innerHeight + 200) {
           setIsMenuVisible(true)
         }
       }
     }
 
+    const handleScroll = () => {
+      checkMenuVisibility()
+    }
+
+    // Check on scroll and on initial load
     window.addEventListener('scroll', handleScroll)
-    // Check on initial load
-    handleScroll()
+    checkMenuVisibility() // Check immediately on load
 
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
+  // Function to scroll to menu section
+  const scrollToMenu = () => {
+    if (menuRef.current) {
+      menuRef.current.scrollIntoView({ 
+        behavior: 'smooth',
+        block: 'start'
+      })
+    }
+  }
+
   return (
     <div className="App">
       <Header />
-      <Hero scrollToMenu={scrollToMenu} />
+      <Hero onExploreClick={scrollToMenu} />
       
-      {/* Invisible trigger element to detect when to show menu */}
-      <div ref={menuTriggerRef} className="menu-trigger"></div>
+      {/* This div will trigger the menu to appear */}
+      <div ref={menuRef} style={{height: '1px', position: 'relative'}}></div>
       
-      {/* Menu with animation */}
-      <div ref={menuSectionRef} className={`menu-container ${isMenuVisible ? 'visible' : ''}`}>
-        <MenuGrid />
-      </div>
-      
+      {isMenuVisible && <MenuGrid />}
       <Footer />
     </div>
   )

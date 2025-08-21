@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
 
 * {
   margin: 0;
@@ -7,10 +7,10 @@
 }
 
 body {
-  font-family: 'Inter', sans-serif;
-  color: #2B2B2B;
+  font-family: 'Poppins', sans-serif;
+  color: #2c1810;
   overflow-x: hidden;
-  background-color: #F4F1DE;
+  background: #faf8f3;
   line-height: 1.6;
 }
 
@@ -20,35 +20,169 @@ html {
 
 /* Custom scrollbar */
 ::-webkit-scrollbar {
-  width: 10px;
+  width: 12px;
 }
 
 ::-webkit-scrollbar-track {
   background: #f1f1f1;
+  border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #E57A44;
-  border-radius: 5px;
+  background: linear-gradient(45deg, #d4a574, #8b4513);
+  border-radius: 10px;
+  border: 2px solid #f1f1f1;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #D26937;
+  background: linear-gradient(45deg, #b8935f, #6b3410);
 }
 
 /* Selection color */
 ::selection {
-  background: rgba(229, 122, 68, 0.3);
+  background: rgba(212, 165, 116, 0.3);
+  color: #2c1810;
 }
 
 /* Focus styles */
 button:focus,
 a:focus {
-  outline: 2px solid #E57A44;
+  outline: 3px solid #d4a574;
   outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Animation keyframes */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-8px);
+  }
+  60% {
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+@keyframes slideInFromBottom {
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Utility classes */
+.fade-in-up {
+  animation: fadeInUp 0.8s ease-out;
+}
+
+.fade-in-left {
+  animation: fadeInLeft 0.8s ease-out;
+}
+
+.fade-in-right {
+  animation: fadeInRight 0.8s ease-out;
+}
+
+.scale-in {
+  animation: scaleIn 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.bounce-animation {
+  animation: bounce 2s infinite;
+}
+
+.float-animation {
+  animation: float 3s ease-in-out infinite;
+}
+
+.pulse-animation {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.slide-in-bottom {
+  animation: slideInFromBottom 0.8s ease-out;
+}
+
+/* Custom color variables */
+:root {
+  --primary-brown: #8b4513;
+  --secondary-brown: #a0522d;
+  --light-brown: #d4a574;
+  --cream: #f5e6d3;
+  --dark-brown: #2c1810;
+  --coffee-brown: #6f4e37;
+  --accent-gold: #ffd700;
 }
 
 /* Smooth transitions for all interactive elements */
-a, button {
-  transition: all 0.3s ease;
+a, button, .interactive {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }

@@ -18,32 +18,67 @@ const Header = () => {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
+  const handleNavClick = (e, href) => {
+    e.preventDefault()
+    
+    if (href === '#home') {
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    } else {
+      // For now, just show an alert - we'll connect these to actual pages later
+      const pageName = href.replace('#', '')
+      alert(`${pageName.charAt(0).toUpperCase() + pageName.slice(1)} page will be added soon!`)
+    }
+    
+    // Close mobile menu if open
+    setIsMenuOpen(false)
+  }
+
   return (
     <header className={`header ${isScrolled ? 'scrolled' : ''}`}>
       <div className="container">
-        <a href="#" className="logo">
-          <Coffee size={32} className="logo-icon" />
-          <span>BrewCraft</span>
+        <a href="#home" className="logo" onClick={(e) => handleNavClick(e, '#home')}>
+          <Coffee size={36} className="logo-icon" />
+          <span>BREW CRAFT</span>
         </a>
         
         <nav className={`nav ${isMenuOpen ? 'nav-open' : ''}`}>
-          <a href="#home" className="nav-link">
+          <a 
+            href="#home" 
+            className="nav-link"
+            onClick={(e) => handleNavClick(e, '#home')}
+          >
             <span>Home</span>
           </a>
-          <a href="#cart" className="nav-link">
-            <ShoppingCart size={18} />
+          <a 
+            href="#cart" 
+            className="nav-link"
+            onClick={(e) => handleNavClick(e, '#cart')}
+          >
+            <ShoppingCart size={20} />
             <span>Cart</span>
           </a>
-          <a href="#checkout" className="nav-link">
-            <Package size={18} />
+          <a 
+            href="#checkout" 
+            className="nav-link"
+            onClick={(e) => handleNavClick(e, '#checkout')}
+          >
+            <Package size={20} />
             <span>Checkout</span>
           </a>
-          <a href="#tracking" className="nav-link">
-            <Truck size={18} />
+          <a 
+            href="#tracking" 
+            className="nav-link"
+            onClick={(e) => handleNavClick(e, '#tracking')}
+          >
+            <Truck size={20} />
             <span>Track Order</span>
           </a>
-          <a href="#signin" className="nav-link">
-            <User size={18} />
+          <a 
+            href="#signin" 
+            className="nav-link"
+            onClick={(e) => handleNavClick(e, '#signin')}
+          >
+            <User size={20} />
             <span>Sign In</span>
           </a>
         </nav>
@@ -51,6 +86,7 @@ const Header = () => {
         <button 
           className={`menu-toggle ${isMenuOpen ? 'active' : ''}`}
           onClick={() => setIsMenuOpen(!isMenuOpen)}
+          aria-label="Toggle mobile menu"
         >
           <span></span>
           <span></span>
