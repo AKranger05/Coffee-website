@@ -69,7 +69,7 @@ const MenuGrid = () => {
     }
   ]
 
-  // Animation effect for cards appearing
+  // Staggered animation effect for cards appearing
   useEffect(() => {
     const timer = setInterval(() => {
       setVisibleCards(prev => {
@@ -79,7 +79,7 @@ const MenuGrid = () => {
         clearInterval(timer)
         return prev
       })
-    }, 150) // Stagger animation by 150ms
+    }, 200) // Stagger animation by 200ms
 
     return () => clearInterval(timer)
   }, [])
@@ -100,8 +100,8 @@ const MenuGrid = () => {
 
   return (
     <section className="menu-section" id="menu">
-      <h2 className="section-title fade-in-up">Our Coffee Collection</h2>
-      <p className="section-subtitle fade-in-up" style={{animationDelay: '0.2s'}}>
+      <h2 className="section-title slide-in-bottom">Our Coffee Collection</h2>
+      <p className="section-subtitle slide-in-bottom" style={{animationDelay: '0.2s'}}>
         Expertly crafted coffee drinks, made fresh daily with premium ingredients 
         sourced from the world's finest coffee growing regions
       </p>
@@ -113,7 +113,7 @@ const MenuGrid = () => {
             className={`coffee-card ${visibleCards.includes(index) ? 'slide-in-bottom' : ''}`}
             style={{
               opacity: visibleCards.includes(index) ? 1 : 0,
-              animationDelay: `${index * 0.1}s`
+              animationDelay: `${index * 0.15}s`
             }}
             onClick={() => handleCardClick(item.name)}
           >
@@ -123,21 +123,21 @@ const MenuGrid = () => {
             <div className="coffee-info">
               <h3>{item.name}</h3>
               <p>{item.description}</p>
-              <span className="price">{item.price}</span>
-            </div>
-            <div className="card-buttons">
-              <button 
-                className="learn-more-btn" 
-                onClick={(e) => handleLearnMore(e, item.name)}
-              >
-                <span>Learn More</span>
-              </button>
-              <button 
-                className="order-now-btn" 
-                onClick={(e) => handleOrderNow(e, item.name, item.price)}
-              >
-                <span>Order Now</span>
-              </button>
+              <div className="price">{item.price}</div>
+              <div className="card-buttons">
+                <button 
+                  className="learn-more-btn" 
+                  onClick={(e) => handleLearnMore(e, item.name)}
+                >
+                  <span>Learn More</span>
+                </button>
+                <button 
+                  className="order-now-btn" 
+                  onClick={(e) => handleOrderNow(e, item.name, item.price)}
+                >
+                  <span>Order Now</span>
+                </button>
+              </div>
             </div>
           </div>
         ))}
