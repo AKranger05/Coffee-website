@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Coffee, ShoppingCart, Package, Truck, User } from 'lucide-react'
 
-const Header = () => {
+const Header = ({ onSignInClick }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
 
@@ -23,13 +23,13 @@ const Header = () => {
     
     if (href === '#home') {
       window.scrollTo({ top: 0, behavior: 'smooth' })
+    } else if (href === '#signin') {
+      onSignInClick?.(e)
     } else {
-      // For now, just show an alert - we'll connect these to actual pages later
       const pageName = href.replace('#', '')
-      alert(`${pageName.charAt(0).toUpperCase() + pageName.slice(1)} page will be added soon!`)
+      alert(`${pageName.charAt(0).toUpperCase() + page.slice(1)} page will be added soon!`)
     }
     
-    // Close mobile menu if open
     setIsMenuOpen(false)
   }
 
