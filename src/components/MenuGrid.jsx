@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 
-const MenuGrid = () => {
+const MenuGrid = ({ onCoffeeClick, onAddToCart }) => {
   const [visibleCards, setVisibleCards] = useState([])
 
   const coffeeItems = [
@@ -69,7 +69,6 @@ const MenuGrid = () => {
     }
   ]
 
-  // Staggered animation effect for cards appearing
   useEffect(() => {
     const timer = setInterval(() => {
       setVisibleCards(prev => {
@@ -79,23 +78,23 @@ const MenuGrid = () => {
         clearInterval(timer)
         return prev
       })
-    }, 200) // Stagger animation by 200ms
+    }, 200)
 
     return () => clearInterval(timer)
   }, [])
 
   const handleCardClick = (coffeeName) => {
-    alert(`${coffeeName} individual page will be added later! You clicked on the coffee card.`)
+    onCoffeeClick(`coffee-${coffeeName.replace(/\s+/g, '-').toLowerCase()}`)
   }
 
   const handleLearnMore = (e, coffeeName) => {
-    e.stopPropagation() // Prevent card click
-    alert(`Learn More about ${coffeeName}! Individual coffee pages will be added later.`)
+    e.stopPropagation()
+    onCoffeeClick(`coffee-${coffeeName.replace(/\s+/g, '-').toLowerCase()}`)
   }
 
   const handleOrderNow = (e, coffeeName, price) => {
-    e.stopPropagation() // Prevent card click
-    alert(`${coffeeName} added to cart! Price: ${price}`)
+    e.stopPropagation()
+    onAddToCart(`add-${coffeeName.replace(/\s+/g, '-').toLowerCase()}-to-cart`)
   }
 
   return (

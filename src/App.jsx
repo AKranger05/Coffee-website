@@ -1,83 +1,132 @@
-// src/App.jsx
 import { useState, useEffect, useRef } from 'react'
-import { Routes, Route, useNavigate, Navigate } from 'react-router-dom'
 import Header from './components/Header'
 import Hero from './components/Hero'
 import MenuGrid from './components/MenuGrid'
 import Footer from './components/Footer'
-import AuthPage from './components/AuthPage'
+import UserAuth from './components/UserAuth'
 import './App.css'
 
 function App() {
+  const [currentPage, setCurrentPage] = useState('home')
   const [isMenuVisible, setIsMenuVisible] = useState(false)
-  const [user, setUser] = useState(null) // Simulate logged-in user
+  const [isUserLoggedIn, setIsUserLoggedIn] = useState(false)
+  const [pendingDestination, setPendingDestination] = useState(null)
   const menuRef = useRef(null)
-  const navigate = useNavigate()
 
   useEffect(() => {
-    const checkMenuVisibility = () => {
-      if (menuRef.current) {
-        const rect = menuRef.current.getBoundingClientRect()
-        if (rect.top < window.innerHeight + 200) {
-          setIsMenuVisible(true)
-        }
-      }
+    // Check if user is logged in from localStorage
+    const savedUser = localStorage.getItem('brewCraftUser')
+    if (savedUser) {
+      setIsUserLoggedIn(true)
     }
-
-    window.addEventListener('scroll', checkMenuVisibility)
-    checkMenuVisibility()
-
-    return () => window.removeEventListener('scroll', checkMenuVisibility)
   }, [])
 
-  const handleLogin = (userData) => {
-    setUser(userData)
-    // Go back to previous page or home
-    navigate(-1)
-  }
+  useEffect(() => {
+    if (currentPage === 'home') {
+      const checkMenuVisibility = () => {
+        if (menuRef.current) {
+          const rect = menuRef.current.getBoundingClientRect()
+          if (rect.top < window.innerHeight + 200) {
+            setIsMenuVisible(true)
+          }
+        }
+      }
 
-  const requireAuth = (element, from) => {
-    return user ? element : <Navigate to={`/auth?from=${from}`} />
-  }
+      const handleScroll = () => {
+        checkMenuVisibility()
+      }
+
+      window.addEventListener('scroll', handleScroll)
+      checkMenuVisibility()
+
+      return () => window.removeEventListener('scroll', handleScroll)
+    }
+  }, [currentPage])
 
   const scrollToMenu = () => {
     if (menuRef.current) {
-      menuRef.current.scrollIntoView({ behavior: 'smooth' })
+      menuRef.current.scrollIntoView({ 
+        behavior: 'smooth',
+        block: 'start'
+      })
+    }
+  }
+
+  const handleNavigation = (page) => {
+    setCurrentPage(page)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  const handleAuthRequiredAction = (destination) => {
+    if (isUserLoggedIn) {
+      // User is logged in, proceed to destination
+      alert(`Going to ${destination} page (will be added later)`)
+    } else {
+      // User not logged in, save destination and show auth
+      setPendingDestination(destination)
+      setCurrentPage('auth')
+    }
+  }
+
+  const handleUserLogin = (userData) => {
+    setIsUserLoggedIn(true)
+    localStorage.setItem('brewCraftUser', JSON.stringify(userData))
+    
+    // If there's a pending destination, go there
+    if (pendingDestination) {
+      alert(`Login successful! Going to ${pendingDestination} page (will be added later)`)
+      setPendingDestination(null)
+      setCurrentPage('home')
+    } else {
+      setCurrentPage('home')
+    }
+  }
+
+  const handleUserLogout = () => {
+    setIsUserLoggedIn(false)
+    localStorage.removeItem('brewCraftUser')
+    setCurrentPage('home')
+  }
+
+  const renderPage = () => {
+    switch (currentPage) {
+      case 'auth':
+        return (
+          <UserAuth 
+            onLogin={handleUserLogin}
+            onCancel={() => {
+              setPendingDestination(null)
+              setCurrentPage('home')
+            }}
+          />
+        )
+      case 'home':
+      default:
+        return (
+          <>
+            <Hero onExploreClick={scrollToMenu} />
+            <div ref={menuRef} style={{height: '1px', position: 'relative'}}></div>
+            {isMenuVisible && (
+              <MenuGrid 
+                onCoffeeClick={handleAuthRequiredAction}
+                onAddToCart={handleAuthRequiredAction}
+              />
+            )}
+            <Footer />
+          </>
+        )
     }
   }
 
   return (
     <div className="App">
-      <Header onSignInClick={() => navigate('/auth?from=signin')} />
-
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <>
-              <Hero onExploreClick={scrollToMenu} />
-              <div ref={menuRef} style={{ height: '1px' }}></div>
-              {isMenuVisible && <MenuGrid onCardClick={(name) => navigate(`/coffee/${name}`)} onOrderNow={(name) => navigate(`/coffee/${name}`)} />}
-              <Footer />
-            </>
-          }
-        />
-
-        <Route
-          path="/auth"
-          element={
-            <AuthPage
-              onLogin={handleLogin}
-              from={new URLSearchParams(window.location.search).get('from')}
-            />
-          }
-        />
-
-        <Route
-          path="/coffee/:name"
-          element={requireAuth(<div style={{ padding: '8rem 2rem', textAlign: 'center', color: 'white' }}>Coffee page will be added soon!</div>, 'coffee')}
-        />
-      </Routes>
+      <Header 
+        onNavigate={handleNavigation}
+        isUserLoggedIn={isUserLoggedIn}
+        onLogout={handleUserLogout}
+        onAuthRequired={handleAuthRequiredAction}
+      />
+      {renderPage()}
     </div>
   )
 }
