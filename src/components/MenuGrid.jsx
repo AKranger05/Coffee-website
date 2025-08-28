@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
+import { Plus, Minus } from 'lucide-react'
 
-const MenuGrid = ({ onCoffeeClick, onAddToCart }) => {
+const MenuGrid = ({ onCoffeeClick, onAddToCart, cartItems, onUpdateQuantity }) => {
   const [visibleCards, setVisibleCards] = useState([])
 
   const coffeeItems = [
@@ -92,9 +93,19 @@ const MenuGrid = ({ onCoffeeClick, onAddToCart }) => {
     onCoffeeClick(`coffee-${coffeeName.replace(/\s+/g, '-').toLowerCase()}`)
   }
 
-  const handleOrderNow = (e, coffeeName, price) => {
+  const handleAddToCart = (e, item) => {
     e.stopPropagation()
-    onAddToCart(`add-${coffeeName.replace(/\s+/g, '-').toLowerCase()}-to-cart`)
+    onAddToCart(item)
+  }
+
+  const handleQuantityChange = (e, itemId, change) => {
+    e.stopPropagation()
+    onUpdateQuantity(itemId, change)
+  }
+
+  const getItemQuantity = (itemId) => {
+    const cartItem = cartItems.find(item => item.id === itemId)
+    return cartItem ? cartItem.quantity : 0
   }
 
   return (
@@ -106,40 +117,63 @@ const MenuGrid = ({ onCoffeeClick, onAddToCart }) => {
       </p>
       
       <div className="menu-grid">
-        {coffeeItems.map((item, index) => (
-          <div 
-            key={item.id} 
-            className={`coffee-card ${visibleCards.includes(index) ? 'slide-in-bottom' : ''}`}
-            style={{
-              opacity: visibleCards.includes(index) ? 1 : 0,
-              animationDelay: `${index * 0.15}s`
-            }}
-            onClick={() => handleCardClick(item.name)}
-          >
-            <div className="coffee-image">
-              <span className="coffee-emoji">{item.emoji}</span>
-            </div>
-            <div className="coffee-info">
-              <h3>{item.name}</h3>
-              <p>{item.description}</p>
-              <div className="price">{item.price}</div>
-              <div className="card-buttons">
-                <button 
-                  className="learn-more-btn" 
-                  onClick={(e) => handleLearnMore(e, item.name)}
-                >
-                  <span>Learn More</span>
-                </button>
-                <button 
-                  className="order-now-btn" 
-                  onClick={(e) => handleOrderNow(e, item.name, item.price)}
-                >
-                  <span>Order Now</span>
-                </button>
+        {coffeeItems.map((item, index) => {
+          const quantity = getItemQuantity(item.id)
+          
+          return (
+            <div 
+              key={item.id} 
+              className={`coffee-card ${visibleCards.includes(index) ? 'slide-in-bottom' : ''}`}
+              style={{
+                opacity: visibleCards.includes(index) ? 1 : 0,
+                animationDelay: `${index * 0.15}s`
+              }}
+              onClick={() => handleCardClick(item.name)}
+            >
+              <div className="coffee-image">
+                <span className="coffee-emoji">{item.emoji}</span>
+              </div>
+              <div className="coffee-info">
+                <h3>{item.name}</h3>
+                <p>{item.description}</p>
+                <div className="price">{item.price}</div>
+                <div className="card-buttons">
+                  <button 
+                    className="learn-more-btn" 
+                    onClick={(e) => handleLearnMore(e, item.name)}
+                  >
+                    <span>Learn More</span>
+                  </button>
+                  
+                  {quantity === 0 ? (
+                    <button 
+                      className="order-now-btn" 
+                      onClick={(e) => handleAddToCart(e, item)}
+                    >
+                      <span>Order Now</span>
+                    </button>
+                  ) : (
+                    <div className="quantity-controls">
+                      <button 
+                        className="quantity-btn minus"
+                        onClick={(e) => handleQuantityChange(e, item.id, -1)}
+                      >
+                        <Minus size={16} />
+                      </button>
+                      <span className="quantity-display">{quantity}</span>
+                      <button 
+                        className="quantity-btn plus"
+                        onClick={(e) => handleQuantityChange(e, item.id, 1)}
+                      >
+                        <Plus size={16} />
+                      </button>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          )
+        })}
       </div>
     </section>
   )

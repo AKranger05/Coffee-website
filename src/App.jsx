@@ -5,6 +5,7 @@ import MenuGrid from './components/MenuGrid'
 import Footer from './components/Footer'
 import UserAuth from './components/UserAuth'
 import EmployeeAuth from './components/EmployeeAuth'
+import CartPage from './components/CartPage'
 import './App.css'
 
 function App() {
@@ -13,6 +14,8 @@ function App() {
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(false)
   const [isEmployeeLoggedIn, setIsEmployeeLoggedIn] = useState(false)
   const [pendingDestination, setPendingDestination] = useState(null)
+  const [cartItems, setCartItems] = useState([])
+  const [cartAnimation, setCartAnimation] = useState({ show: false, count: 0 })
   const menuRef = useRef(null)
 
   useEffect(() => {
@@ -27,7 +30,18 @@ function App() {
     if (savedEmployee) {
       setIsEmployeeLoggedIn(true)
     }
+
+    // Load cart from localStorage
+    const savedCart = localStorage.getItem('brewCraftCart')
+    if (savedCart) {
+      setCartItems(JSON.parse(savedCart))
+    }
   }, [])
+
+  // Save cart to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem('brewCraftCart', JSON.stringify(cartItems))
+  }, [cartItems])
 
   useEffect(() => {
     if (currentPage === 'home') {
@@ -66,9 +80,19 @@ function App() {
   }
 
   const handleAuthRequiredAction = (destination) => {
+    if (destination === 'cart') {
+      // Cart is accessible to everyone
+      setCurrentPage('cart')
+      return
+    }
+
     if (isUserLoggedIn) {
       // User is logged in, proceed to destination
-      alert(`Going to ${destination} page (will be added later)`)
+      if (destination === 'cart') {
+        setCurrentPage('cart')
+      } else {
+        alert(`Going to ${destination} page (will be added later)`)
+      }
     } else {
       // User not logged in, save destination and show auth
       setPendingDestination(destination)
@@ -87,6 +111,73 @@ function App() {
     }
   }
 
+  const addToCart = (item) => {
+    setCartItems(prevItems => {
+      const existingItem = prevItems.find(cartItem => cartItem.id === item.id)
+      
+      if (existingItem) {
+        // Item exists, increase quantity
+        const updatedItems = prevItems.map(cartItem =>
+          cartItem.id === item.id 
+            ? { ...cartItem, quantity: cartItem.quantity + 1 }
+            : cartItem
+        )
+        
+        // Trigger cart animation
+        const newQuantity = existingItem.quantity + 1
+        triggerCartAnimation(newQuantity)
+        
+        return updatedItems
+      } else {
+        // New item, add with quantity 1
+        const newItem = { ...item, quantity: 1 }
+        
+        // Trigger cart animation
+        triggerCartAnimation(1)
+        
+        return [...prevItems, newItem]
+      }
+    })
+  }
+
+  const updateCartQuantity = (itemId, change) => {
+    setCartItems(prevItems => {
+      return prevItems.map(item => {
+        if (item.id === itemId) {
+          const newQuantity = Math.max(0, item.quantity + change)
+          return { ...item, quantity: newQuantity }
+        }
+        return item
+      }).filter(item => item.quantity > 0) // Remove items with 0 quantity
+    })
+  }
+
+  const removeFromCart = (itemId) => {
+    setCartItems(prevItems => prevItems.filter(item => item.id !== itemId))
+  }
+
+  const clearCart = () => {
+    setCartItems([])
+  }
+
+  const triggerCartAnimation = (count) => {
+    setCartAnimation({ show: true, count })
+    setTimeout(() => {
+      setCartAnimation({ show: false, count: 0 })
+    }, 1500)
+  }
+
+  const getCartItemCount = () => {
+    return cartItems.reduce((total, item) => total + item.quantity, 0)
+  }
+
+  const getCartTotal = () => {
+    return cartItems.reduce((total, item) => {
+      const price = parseInt(item.price.replace('₹', ''))
+      return total + (price * item.quantity)
+    }, 0)
+  }
+
   const handleUserLogin = (userData) => {
     if (userData.type === 'employee') {
       setIsEmployeeLoggedIn(true)
@@ -98,7 +189,11 @@ function App() {
       
       // If there's a pending destination, go there
       if (pendingDestination) {
-        alert(`Login successful! Going to ${pendingDestination} page (will be added later)`)
+        if (pendingDestination === 'cart') {
+          setCurrentPage('cart')
+        } else {
+          alert(`Login successful! Going to ${pendingDestination} page (will be added later)`)
+        }
         setPendingDestination(null)
       }
     }
@@ -108,6 +203,7 @@ function App() {
   const handleUserLogout = () => {
     setIsUserLoggedIn(false)
     localStorage.removeItem('brewCraftUser')
+    // Keep cart items when logging out
     setCurrentPage('home')
   }
 
@@ -134,6 +230,19 @@ function App() {
             onCancel={() => setCurrentPage('home')}
           />
         )
+      case 'cart':
+        return (
+          <CartPage
+            cartItems={cartItems}
+            onUpdateQuantity={updateCartQuantity}
+            onRemoveItem={removeFromCart}
+            onClearCart={clearCart}
+            onBackToMenu={() => setCurrentPage('home')}
+            onCheckout={() => handleAuthRequiredAction('checkout')}
+            isUserLoggedIn={isUserLoggedIn}
+            cartTotal={getCartTotal()}
+          />
+        )
       case 'home':
       default:
         return (
@@ -143,7 +252,9 @@ function App() {
             {isMenuVisible && (
               <MenuGrid 
                 onCoffeeClick={handleAuthRequiredAction}
-                onAddToCart={handleAuthRequiredAction}
+                onAddToCart={addToCart}
+                cartItems={cartItems}
+                onUpdateQuantity={updateCartQuantity}
               />
             )}
             <Footer 
@@ -162,6 +273,8 @@ function App() {
         isUserLoggedIn={isUserLoggedIn}
         onLogout={handleUserLogout}
         onAuthRequired={handleAuthRequiredAction}
+        cartItemCount={getCartItemCount()}
+        cartAnimation={cartAnimation}
       />
       {renderPage()}
     </div>

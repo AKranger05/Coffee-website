@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Coffee, ShoppingCart, Package, Truck, User, LogOut } from 'lucide-react'
 
-const Header = ({ onNavigate, isUserLoggedIn, onLogout, onAuthRequired }) => {
+const Header = ({ onNavigate, isUserLoggedIn, onLogout, onAuthRequired, cartItemCount, cartAnimation }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
 
@@ -54,10 +54,18 @@ const Header = ({ onNavigate, isUserLoggedIn, onLogout, onAuthRequired }) => {
           
           <a 
             href="#cart" 
-            className="nav-link"
+            className="nav-link cart-nav-link"
             onClick={(e) => handleNavClick(e, 'auth-required', 'cart')}
           >
-            <ShoppingCart size={20} />
+            <div className="cart-icon-wrapper">
+              <ShoppingCart size={20} />
+              {cartItemCount > 0 && (
+                <span className="cart-badge">{cartItemCount}</span>
+              )}
+              {cartAnimation.show && (
+                <span className="cart-animation">+{cartAnimation.count}</span>
+              )}
+            </div>
             <span>Cart</span>
           </a>
           
