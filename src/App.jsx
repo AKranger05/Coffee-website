@@ -4,12 +4,14 @@ import Hero from './components/Hero'
 import MenuGrid from './components/MenuGrid'
 import Footer from './components/Footer'
 import UserAuth from './components/UserAuth'
+import BusinessAuth from './components/BusinessAuth'
 import './App.css'
 
 function App() {
   const [currentPage, setCurrentPage] = useState('home')
   const [isMenuVisible, setIsMenuVisible] = useState(false)
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(false)
+  const [isBusinessLoggedIn, setIsBusinessLoggedIn] = useState(false)
   const [pendingDestination, setPendingDestination] = useState(null)
   const menuRef = useRef(null)
 
@@ -18,6 +20,12 @@ function App() {
     const savedUser = localStorage.getItem('brewCraftUser')
     if (savedUser) {
       setIsUserLoggedIn(true)
+    }
+    
+    // Check if business is logged in from localStorage
+    const savedBusiness = localStorage.getItem('brewCraftBusiness')
+    if (savedBusiness) {
+      setIsBusinessLoggedIn(true)
     }
   }, [])
 
@@ -69,23 +77,31 @@ function App() {
   }
 
   const handleUserLogin = (userData) => {
-    setIsUserLoggedIn(true)
-    localStorage.setItem('brewCraftUser', JSON.stringify(userData))
-    
-    // If there's a pending destination, go there
-    if (pendingDestination) {
-      alert(`Login successful! Going to ${pendingDestination} page (will be added later)`)
-      setPendingDestination(null)
-      setCurrentPage('home')
+    if (userData.type === 'business') {
+      setIsBusinessLoggedIn(true)
+      localStorage.setItem('brewCraftBusiness', JSON.stringify(userData))
+      alert('Business login successful! Business dashboard will be added later.')
     } else {
-      setCurrentPage('home')
+      setIsUserLoggedIn(true)
+      localStorage.setItem('brewCraftUser', JSON.stringify(userData))
+      
+      // If there's a pending destination, go there
+      if (pendingDestination) {
+        alert(`Login successful! Going to ${pendingDestination} page (will be added later)`)
+        setPendingDestination(null)
+      }
     }
+    setCurrentPage('home')
   }
 
   const handleUserLogout = () => {
     setIsUserLoggedIn(false)
     localStorage.removeItem('brewCraftUser')
     setCurrentPage('home')
+  }
+
+  const handleBusinessAuth = () => {
+    setCurrentPage('businessAuth')
   }
 
   const renderPage = () => {
@@ -100,6 +116,13 @@ function App() {
             }}
           />
         )
+      case 'businessAuth':
+        return (
+          <BusinessAuth 
+            onLogin={handleUserLogin}
+            onCancel={() => setCurrentPage('home')}
+          />
+        )
       case 'home':
       default:
         return (
@@ -112,7 +135,7 @@ function App() {
                 onAddToCart={handleAuthRequiredAction}
               />
             )}
-            <Footer />
+            <Footer onBusinessAuth={handleBusinessAuth} />
           </>
         )
     }

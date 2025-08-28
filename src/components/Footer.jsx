@@ -1,6 +1,7 @@
 import React from 'react'
+import { Briefcase } from 'lucide-react'
 
-const Footer = () => {
+const Footer = ({ onBusinessAuth }) => {
   const handleLinkClick = (e, pageName) => {
     e.preventDefault()
     alert(`${pageName} page will be added soon!`)
@@ -67,6 +68,17 @@ const Footer = () => {
               </a>
             </li>
           </ul>
+          
+          {/* Business Partner Auth Button */}
+          <div className="business-auth-section">
+            <button 
+              className="business-auth-btn" 
+              onClick={onBusinessAuth}
+            >
+              <Briefcase size={18} />
+              <span>Sign In as Business Partner</span>
+            </button>
+          </div>
         </div>
       </div>
       
