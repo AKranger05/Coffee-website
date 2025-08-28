@@ -4,14 +4,14 @@ import Hero from './components/Hero'
 import MenuGrid from './components/MenuGrid'
 import Footer from './components/Footer'
 import UserAuth from './components/UserAuth'
-import BusinessAuth from './components/BusinessAuth'
+import EmployeeAuth from './components/EmployeeAuth'
 import './App.css'
 
 function App() {
   const [currentPage, setCurrentPage] = useState('home')
   const [isMenuVisible, setIsMenuVisible] = useState(false)
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(false)
-  const [isBusinessLoggedIn, setIsBusinessLoggedIn] = useState(false)
+  const [isEmployeeLoggedIn, setIsEmployeeLoggedIn] = useState(false)
   const [pendingDestination, setPendingDestination] = useState(null)
   const menuRef = useRef(null)
 
@@ -22,10 +22,10 @@ function App() {
       setIsUserLoggedIn(true)
     }
     
-    // Check if business is logged in from localStorage
-    const savedBusiness = localStorage.getItem('brewCraftBusiness')
-    if (savedBusiness) {
-      setIsBusinessLoggedIn(true)
+    // Check if employee is logged in from localStorage
+    const savedEmployee = localStorage.getItem('brewCraftEmployee')
+    if (savedEmployee) {
+      setIsEmployeeLoggedIn(true)
     }
   }, [])
 
@@ -76,11 +76,22 @@ function App() {
     }
   }
 
+  const handleEmployeeAuthRequiredAction = (destination) => {
+    if (isEmployeeLoggedIn) {
+      // Employee is logged in, proceed to destination
+      alert(`Going to ${destination} page (will be added later)`)
+    } else {
+      // Employee not logged in, show employee auth
+      alert('Please sign in as an employee to access this feature')
+      setCurrentPage('employeeAuth')
+    }
+  }
+
   const handleUserLogin = (userData) => {
-    if (userData.type === 'business') {
-      setIsBusinessLoggedIn(true)
-      localStorage.setItem('brewCraftBusiness', JSON.stringify(userData))
-      alert('Business login successful! Business dashboard will be added later.')
+    if (userData.type === 'employee') {
+      setIsEmployeeLoggedIn(true)
+      localStorage.setItem('brewCraftEmployee', JSON.stringify(userData))
+      alert('Employee login successful! Employee dashboard will be added later.')
     } else {
       setIsUserLoggedIn(true)
       localStorage.setItem('brewCraftUser', JSON.stringify(userData))
@@ -100,8 +111,8 @@ function App() {
     setCurrentPage('home')
   }
 
-  const handleBusinessAuth = () => {
-    setCurrentPage('businessAuth')
+  const handleEmployeeAuth = () => {
+    setCurrentPage('employeeAuth')
   }
 
   const renderPage = () => {
@@ -116,9 +127,9 @@ function App() {
             }}
           />
         )
-      case 'businessAuth':
+      case 'employeeAuth':
         return (
-          <BusinessAuth 
+          <EmployeeAuth 
             onLogin={handleUserLogin}
             onCancel={() => setCurrentPage('home')}
           />
@@ -135,7 +146,10 @@ function App() {
                 onAddToCart={handleAuthRequiredAction}
               />
             )}
-            <Footer onBusinessAuth={handleBusinessAuth} />
+            <Footer 
+              onEmployeeAuth={handleEmployeeAuth} 
+              onEmployeeAuthRequired={handleEmployeeAuthRequiredAction}
+            />
           </>
         )
     }

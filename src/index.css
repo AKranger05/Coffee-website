@@ -472,7 +472,7 @@ button, a, .interactive {
   text-decoration: none;
 }
 
-/* BUSINESS PARTNER AUTHENTICATION STYLES */
+/* EMPLOYEE AUTHENTICATION STYLES */
 .business-auth-section {
   margin-top: 2rem;
   padding-top: 1.5rem;
@@ -519,16 +519,16 @@ button, a, .interactive {
   box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
 }
 
-.business-auth-card {
+.employee-auth-card {
   max-width: 500px;
 }
 
-.business-logo-icon {
+.employee-logo-icon {
   color: #667eea;
   filter: drop-shadow(0 0 10px rgba(102, 126, 234, 0.5));
 }
 
-.business-select {
+.employee-select {
   background: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 12px;
@@ -540,13 +540,13 @@ button, a, .interactive {
   cursor: pointer;
 }
 
-.business-select option {
+.employee-select option {
   background: rgba(26, 26, 46, 0.9);
   color: white;
   padding: 0.5rem;
 }
 
-.business-select:focus {
+.employee-select:focus {
   outline: none;
   border-color: #667eea;
   background: rgba(255, 255, 255, 0.15);
@@ -560,7 +560,7 @@ button, a, .interactive {
   font-style: italic;
 }
 
-.business-submit-btn {
+.employee-submit-btn {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   border: none;
@@ -578,7 +578,7 @@ button, a, .interactive {
   overflow: hidden;
 }
 
-.business-submit-btn::before {
+.employee-submit-btn::before {
   content: '';
   position: absolute;
   top: 0;
@@ -589,11 +589,11 @@ button, a, .interactive {
   transition: left 0.6s ease;
 }
 
-.business-submit-btn:hover::before {
+.employee-submit-btn:hover::before {
   left: 100%;
 }
 
-.business-submit-btn:hover {
+.employee-submit-btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
 }

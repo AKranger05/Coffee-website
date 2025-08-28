@@ -64,17 +64,47 @@ const UserAuth = ({ onLogin, onCancel }) => {
       return
     }
 
-    // Simulate API call
-    setTimeout(() => {
-      const userData = {
-        id: Date.now(),
-        name: formData.name || formData.email.split('@')[0],
-        email: formData.email,
-        loginTime: new Date().toISOString()
+    // Frontend demo validation - your friend will replace this with backend API call
+    const demoUsers = {
+      'Akshat@gmail.com': { password: 'user123', name: 'Akshat' },
+      'Shivang@gmail.com': { password: 'coffee456', name: 'Shivang' },
+      'Raj@yahoo.com': { password: 'brew789', name: 'Raj' },
+      'Vivek@gmail.com': { password: 'latte123', name: 'Vivek' }
+    }
+
+    if (isLogin) {
+      // Check if user email and password match (demo validation)
+      const demoUser = demoUsers[formData.email]
+      if (demoUser && demoUser.password === formData.password) {
+        const userData = {
+          id: Date.now(),
+          type: 'user',
+          name: demoUser.name,
+          email: formData.email,
+          loginTime: new Date().toISOString()
+        }
+        
+        onLogin(userData)
+      } else {
+        setErrors({ 
+          email: 'Invalid email or password',
+          password: 'Invalid email or password'
+        })
       }
-      
-      onLogin(userData)
-    }, 1000)
+    } else {
+      // For signup, simulate success (backend will handle registration)
+      setTimeout(() => {
+        const userData = {
+          id: Date.now(),
+          type: 'user',
+          name: formData.name,
+          email: formData.email,
+          loginTime: new Date().toISOString()
+        }
+        
+        onLogin(userData)
+      }, 1000)
+    }
   }
 
   const toggleMode = () => {
@@ -112,6 +142,25 @@ const UserAuth = ({ onLogin, onCancel }) => {
                 : 'Create your account and discover amazing coffee experiences'
               }
             </p>
+
+            {/* Demo credentials info for testing */}
+            {isLogin && (
+              <div style={{
+                background: 'rgba(255, 107, 107, 0.1)',
+                border: '1px solid rgba(255, 107, 107, 0.3)',
+                borderRadius: '12px',
+                padding: '1rem',
+                marginBottom: '1.5rem',
+                fontSize: '0.85rem',
+                color: 'rgba(255, 255, 255, 0.8)'
+              }}>
+                <strong style={{color: '#ff6b6b'}}>Demo User Accounts:</strong><br/>
+                Akshat@gmail.com / user123<br/>
+                Shivang@gmail.com / coffee456<br/>
+                Raj@yahoo.com / brew789<br/>
+                Vivek@gmail.com / latte123
+              </div>
+            )}
 
             <form onSubmit={handleSubmit} className="auth-form">
               {!isLogin && (

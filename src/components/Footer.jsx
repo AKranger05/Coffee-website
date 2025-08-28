@@ -1,10 +1,30 @@
 import React from 'react'
-import { Briefcase } from 'lucide-react'
+import { UserCheck } from 'lucide-react'
 
-const Footer = ({ onBusinessAuth }) => {
+const Footer = ({ onEmployeeAuth, onEmployeeAuthRequired }) => {
   const handleLinkClick = (e, pageName) => {
     e.preventDefault()
     alert(`${pageName} page will be added soon!`)
+  }
+
+  const handleEmployeeDashboardClick = (e) => {
+    e.preventDefault()
+    onEmployeeAuthRequired('employee-dashboard')
+  }
+
+  const handleMenuManagementClick = (e) => {
+    e.preventDefault()
+    onEmployeeAuthRequired('menu-management')
+  }
+
+  const handleOrderManagementClick = (e) => {
+    e.preventDefault()
+    onEmployeeAuthRequired('order-management')
+  }
+
+  const handleAnalyticsClick = (e) => {
+    e.preventDefault()
+    onEmployeeAuthRequired('analytics')
   }
 
   return (
@@ -33,12 +53,12 @@ const Footer = ({ onBusinessAuth }) => {
         </div>
         
         <div className="footer-section">
-          <h3>For Business Partners</h3>
+          <h3>For Employees</h3>
           <ul>
             <li>
               <a 
                 href="#dashboard" 
-                onClick={(e) => handleLinkClick(e, 'Business Dashboard')}
+                onClick={handleEmployeeDashboardClick}
               >
                 Dashboard
               </a>
@@ -46,7 +66,7 @@ const Footer = ({ onBusinessAuth }) => {
             <li>
               <a 
                 href="#menu-management" 
-                onClick={(e) => handleLinkClick(e, 'Menu management')}
+                onClick={handleMenuManagementClick}
               >
                 Menu management
               </a>
@@ -54,7 +74,7 @@ const Footer = ({ onBusinessAuth }) => {
             <li>
               <a 
                 href="#order-management" 
-                onClick={(e) => handleLinkClick(e, 'Order management')}
+                onClick={handleOrderManagementClick}
               >
                 Order management
               </a>
@@ -62,28 +82,28 @@ const Footer = ({ onBusinessAuth }) => {
             <li>
               <a 
                 href="#analytics" 
-                onClick={(e) => handleLinkClick(e, 'Analytics')}
+                onClick={handleAnalyticsClick}
               >
                 Analytics
               </a>
             </li>
           </ul>
           
-          {/* Business Partner Auth Button */}
+          {/* Employee Auth Button */}
           <div className="business-auth-section">
             <button 
               className="business-auth-btn" 
-              onClick={onBusinessAuth}
+              onClick={onEmployeeAuth}
             >
-              <Briefcase size={18} />
-              <span>Sign In as Business Partner</span>
+              <UserCheck size={18} />
+              <span>Employee Login</span>
             </button>
           </div>
         </div>
       </div>
       
       <div className="footer-bottom">
-        <p>&copy; 2023 BREW CRAFT Coffee. All rights reserved. Crafted with ❤️ for coffee lovers worldwide.</p>
+        <p>&copy; 2025 BREW CRAFT Coffee. All rights reserved. Crafted with ❤️ for coffee lovers worldwide.</p>
       </div>
     </footer>
   )
