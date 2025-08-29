@@ -6,6 +6,7 @@ import Footer from './components/Footer'
 import UserAuth from './components/UserAuth'
 import EmployeeAuth from './components/EmployeeAuth'
 import CartPage from './components/CartPage'
+import CheckoutPage from './components/CheckoutPage'
 import './App.css'
 
 function App() {
@@ -16,32 +17,40 @@ function App() {
   const [pendingDestination, setPendingDestination] = useState(null)
   const [cartItems, setCartItems] = useState([])
   const [cartAnimation, setCartAnimation] = useState({ show: false, count: 0 })
+  const [orderHistory, setOrderHistory] = useState([])
   const menuRef = useRef(null)
 
   useEffect(() => {
-    // Check if user is logged in from localStorage
-    const savedUser = localStorage.getItem('brewCraftUser')
+    // Check if user is logged in
+    const savedUser = JSON.parse(localStorage.getItem('brewCraftUser') || 'null')
     if (savedUser) {
       setIsUserLoggedIn(true)
     }
     
-    // Check if employee is logged in from localStorage
-    const savedEmployee = localStorage.getItem('brewCraftEmployee')
+    // Check if employee is logged in
+    const savedEmployee = JSON.parse(localStorage.getItem('brewCraftEmployee') || 'null')
     if (savedEmployee) {
       setIsEmployeeLoggedIn(true)
     }
 
-    // Load cart from localStorage
-    const savedCart = localStorage.getItem('brewCraftCart')
-    if (savedCart) {
-      setCartItems(JSON.parse(savedCart))
-    }
+    // Load cart
+    const savedCart = JSON.parse(localStorage.getItem('brewCraftCart') || '[]')
+    setCartItems(savedCart)
+
+    // Load order history
+    const savedOrders = JSON.parse(localStorage.getItem('brewCraftOrders') || '[]')
+    setOrderHistory(savedOrders)
   }, [])
 
   // Save cart to localStorage whenever it changes
   useEffect(() => {
     localStorage.setItem('brewCraftCart', JSON.stringify(cartItems))
   }, [cartItems])
+
+  // Save order history to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem('brewCraftOrders', JSON.stringify(orderHistory))
+  }, [orderHistory])
 
   useEffect(() => {
     if (currentPage === 'home') {
@@ -86,10 +95,19 @@ function App() {
       return
     }
 
+    if (destination === 'checkout' && !isUserLoggedIn) {
+      // Checkout requires authentication
+      setPendingDestination(destination)
+      setCurrentPage('auth')
+      return
+    }
+
     if (isUserLoggedIn) {
       // User is logged in, proceed to destination
       if (destination === 'cart') {
         setCurrentPage('cart')
+      } else if (destination === 'checkout') {
+        setCurrentPage('checkout')
       } else {
         alert(`Going to ${destination} page (will be added later)`)
       }
@@ -191,6 +209,8 @@ function App() {
       if (pendingDestination) {
         if (pendingDestination === 'cart') {
           setCurrentPage('cart')
+        } else if (pendingDestination === 'checkout') {
+          setCurrentPage('checkout')
         } else {
           alert(`Login successful! Going to ${pendingDestination} page (will be added later)`)
         }
@@ -209,6 +229,20 @@ function App() {
 
   const handleEmployeeAuth = () => {
     setCurrentPage('employeeAuth')
+  }
+
+  const handleOrderComplete = (orderData) => {
+    // Add order to history
+    setOrderHistory(prev => [orderData, ...prev])
+    
+    // Clear cart
+    setCartItems([])
+    
+    // Show success message and redirect to home
+    setTimeout(() => {
+      alert(`Order ${orderData.orderId} confirmed! You'll receive updates via SMS/Email.`)
+      setCurrentPage('home')
+    }, 2000)
   }
 
   const renderPage = () => {
@@ -241,6 +275,16 @@ function App() {
             onCheckout={() => handleAuthRequiredAction('checkout')}
             isUserLoggedIn={isUserLoggedIn}
             cartTotal={getCartTotal()}
+          />
+        )
+      case 'checkout':
+        return (
+          <CheckoutPage
+            cartItems={cartItems}
+            cartTotal={getCartTotal()}
+            onBackToCart={() => setCurrentPage('cart')}
+            onOrderComplete={handleOrderComplete}
+            isUserLoggedIn={isUserLoggedIn}
           />
         )
       case 'home':
