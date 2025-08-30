@@ -39,8 +39,8 @@ const CheckoutPage = ({
   const [errors, setErrors] = useState({})
   const [isProcessing, setIsProcessing] = useState(false)
 
-  const deliveryFee = 50
-  const tax = Math.round(cartTotal * 0.05)
+  const deliveryFee = cartTotal > 0 ? 50 : 0
+  const tax = cartTotal > 0 ? Math.round(cartTotal * 0.05) : 0
   const finalTotal = cartTotal + deliveryFee + tax
 
   const handleInputChange = (e) => {
@@ -253,9 +253,17 @@ const CheckoutPage = ({
 
                 <button 
                   className="home-btn"
-                  onClick={() => window.location.reload()}
+                  onClick={() => onOrderComplete({
+                    orderId: `BC${Date.now().toString().slice(-6)}`,
+                    items: cartItems,
+                    total: finalTotal,
+                    customerInfo: formData,
+                    orderTime: new Date(),
+                    estimatedDelivery: new Date(Date.now() + 45 * 60 * 1000),
+                    status: 'confirmed'
+                  })}
                 >
-                  Return to Home
+                  Track Your Order
                 </button>
               </div>
             )}
@@ -618,7 +626,7 @@ const CheckoutPage = ({
                 </div>
                 <div className="summary-row">
                   <span>Delivery Fee</span>
-                  <span>₹{deliveryFee}</span>
+                  <span>{deliveryFee > 0 ? `₹${deliveryFee}` : 'Free'}</span>
                 </div>
                 <div className="summary-row">
                   <span>Tax (5%)</span>

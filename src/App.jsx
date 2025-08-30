@@ -7,6 +7,7 @@ import UserAuth from './components/UserAuth'
 import EmployeeAuth from './components/EmployeeAuth'
 import CartPage from './components/CartPage'
 import CheckoutPage from './components/CheckoutPage'
+import OrderTrackingPage from './components/OrderTrackingPage'
 import './App.css'
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
   const [cartItems, setCartItems] = useState([])
   const [cartAnimation, setCartAnimation] = useState({ show: false, count: 0 })
   const [orderHistory, setOrderHistory] = useState([])
+  const [currentOrder, setCurrentOrder] = useState(null)
   const menuRef = useRef(null)
 
   useEffect(() => {
@@ -40,6 +42,10 @@ function App() {
     // Load order history
     const savedOrders = JSON.parse(localStorage.getItem('brewCraftOrders') || '[]')
     setOrderHistory(savedOrders)
+
+    // Load current order if exists
+    const savedCurrentOrder = JSON.parse(localStorage.getItem('brewCraftCurrentOrder') || 'null')
+    setCurrentOrder(savedCurrentOrder)
   }, [])
 
   // Save cart to localStorage whenever it changes
@@ -51,6 +57,15 @@ function App() {
   useEffect(() => {
     localStorage.setItem('brewCraftOrders', JSON.stringify(orderHistory))
   }, [orderHistory])
+
+  // Save current order to localStorage whenever it changes
+  useEffect(() => {
+    if (currentOrder) {
+      localStorage.setItem('brewCraftCurrentOrder', JSON.stringify(currentOrder))
+    } else {
+      localStorage.removeItem('brewCraftCurrentOrder')
+    }
+  }, [currentOrder])
 
   useEffect(() => {
     if (currentPage === 'home') {
@@ -95,6 +110,17 @@ function App() {
       return
     }
 
+    if (destination === 'tracking') {
+      // Check if user has a current order to track
+      if (currentOrder) {
+        setCurrentPage('tracking')
+        return
+      } else {
+        alert('No active order to track. Place an order first!')
+        return
+      }
+    }
+
     if (destination === 'checkout' && !isUserLoggedIn) {
       // Checkout requires authentication
       setPendingDestination(destination)
@@ -108,6 +134,12 @@ function App() {
         setCurrentPage('cart')
       } else if (destination === 'checkout') {
         setCurrentPage('checkout')
+      } else if (destination === 'tracking') {
+        if (currentOrder) {
+          setCurrentPage('tracking')
+        } else {
+          alert('No active order to track. Place an order first!')
+        }
       } else {
         alert(`Going to ${destination} page (will be added later)`)
       }
@@ -211,6 +243,12 @@ function App() {
           setCurrentPage('cart')
         } else if (pendingDestination === 'checkout') {
           setCurrentPage('checkout')
+        } else if (pendingDestination === 'tracking') {
+          if (currentOrder) {
+            setCurrentPage('tracking')
+          } else {
+            alert('No active order to track.')
+          }
         } else {
           alert(`Login successful! Going to ${pendingDestination} page (will be added later)`)
         }
@@ -235,13 +273,16 @@ function App() {
     // Add order to history
     setOrderHistory(prev => [orderData, ...prev])
     
+    // Set as current order for tracking
+    setCurrentOrder(orderData)
+    
     // Clear cart
     setCartItems([])
     
-    // Show success message and redirect to home
+    // Show success message and redirect to tracking
     setTimeout(() => {
-      alert(`Order ${orderData.orderId} confirmed! You'll receive updates via SMS/Email.`)
-      setCurrentPage('home')
+      alert(`Order ${orderData.orderId} confirmed! Track your order status.`)
+      setCurrentPage('tracking')
     }, 2000)
   }
 
@@ -285,6 +326,13 @@ function App() {
             onBackToCart={() => setCurrentPage('cart')}
             onOrderComplete={handleOrderComplete}
             isUserLoggedIn={isUserLoggedIn}
+          />
+        )
+      case 'tracking':
+        return (
+          <OrderTrackingPage
+            onBackToHome={() => setCurrentPage('home')}
+            orderData={currentOrder}
           />
         )
       case 'home':

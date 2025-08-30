@@ -116,7 +116,7 @@ const CartPage = ({
               
               <div className="summary-row">
                 <span>Delivery Fee</span>
-                <span>₹50</span>
+                <span>{cartTotal > 0 ? '₹50' : 'Free'}</span>
               </div>
               
               <div className="summary-row">
@@ -128,7 +128,7 @@ const CartPage = ({
               
               <div className="summary-row total">
                 <span>Total</span>
-                <span>₹{(cartTotal + 50 + Math.round(cartTotal * 0.05)).toLocaleString()}</span>
+                <span>₹{(cartTotal + (cartTotal > 0 ? 50 : 0) + Math.round(cartTotal * 0.05)).toLocaleString()}</span>
               </div>
 
               <button 
