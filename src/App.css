@@ -933,8 +933,9 @@
 
 .cart-content {
   display: grid;
-  grid-template-columns: 1fr 400px;
+  grid-template-columns: 2fr 1fr;
   gap: 3rem;
+  align-items: start;
 }
 
 .cart-items {
@@ -1078,7 +1079,13 @@
   transform: scale(1.1);
 }
 
-/* Cart Summary */
+/* Cart Summary - FIXED ALIGNMENT */
+.cart-summary {
+  width: 100%;
+  max-width: 400px;
+  justify-self: end;
+}
+
 .cart-summary-card {
   background: rgba(26, 26, 46, 0.4);
   backdrop-filter: blur(30px);
@@ -1088,7 +1095,7 @@
   position: sticky;
   top: 140px;
   animation: slideInFromRight 0.6s ease-out forwards;
-  max-width: 100%;
+  width: 100%;
   box-sizing: border-box;
 }
 
@@ -1144,7 +1151,6 @@
   margin-top: 2rem;
   position: relative;
   overflow: hidden;
-  max-width: 100%;
   box-sizing: border-box;
 }
 
@@ -1488,10 +1494,11 @@
   font-size: 1.1rem;
 }
 
-/* Checkout Summary Sidebar */
+/* Checkout Summary Sidebar - FIXED ALIGNMENT */
 .checkout-summary {
-  position: sticky;
-  top: 140px;
+  width: 100%;
+  max-width: 400px;
+  justify-self: end;
 }
 
 .checkout-summary-card {
@@ -1501,8 +1508,10 @@
   border-radius: 20px;
   padding: 2rem;
   animation: slideInFromRight 0.6s ease-out forwards;
-  max-width: 100%;
+  width: 100%;
   box-sizing: border-box;
+  position: sticky;
+  top: 140px;
 }
 
 .checkout-summary-card h3 {
@@ -1585,7 +1594,6 @@
   letter-spacing: 0.5px;
   position: relative;
   overflow: hidden;
-  max-width: 100%;
   box-sizing: border-box;
 }
 
@@ -2598,6 +2606,21 @@
     grid-template-columns: 1fr;
     gap: 1rem;
   }
+  
+  .cart-content {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  
+  .cart-summary, .checkout-summary {
+    width: 100%;
+    max-width: none;
+    justify-self: stretch;
+  }
+  
+  .cart-summary-card, .checkout-summary-card {
+    position: static;
+  }
 }
 
 @media (max-width: 768px) {
@@ -2671,15 +2694,6 @@
   .auth-visual {
     display: none;
   }
-
-  .cart-content {
-    grid-template-columns: 1fr;
-    gap: 2rem;
-  }
-  
-  .cart-summary-card, .checkout-summary {
-    position: static;
-  }
   
   .cart-item {
     flex-direction: column;
@@ -2689,6 +2703,7 @@
   
   .cart-item-details {
     order: 1;
+    text-align: center;
   }
   
   .cart-item-controls {

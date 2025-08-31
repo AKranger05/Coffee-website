@@ -308,7 +308,7 @@ const CheckoutPage = ({
                         value={formData.firstName}
                         onChange={handleInputChange}
                         className={errors.firstName ? 'error' : ''}
-                        placeholder="John"
+                        placeholder="Akshat"
                       />
                       {errors.firstName && <span className="error-text">{errors.firstName}</span>}
                     </div>
@@ -321,7 +321,7 @@ const CheckoutPage = ({
                         value={formData.lastName}
                         onChange={handleInputChange}
                         className={errors.lastName ? 'error' : ''}
-                        placeholder="Doe"
+                        placeholder="Tiwari"
                       />
                       {errors.lastName && <span className="error-text">{errors.lastName}</span>}
                     </div>
@@ -339,7 +339,7 @@ const CheckoutPage = ({
                       value={formData.email}
                       onChange={handleInputChange}
                       className={errors.email ? 'error' : ''}
-                      placeholder="john.doe@example.com"
+                      placeholder="Akshat@email.com"
                     />
                     {errors.email && <span className="error-text">{errors.email}</span>}
                   </div>
@@ -547,7 +547,7 @@ const CheckoutPage = ({
                         value={formData.cardName}
                         onChange={handleInputChange}
                         className={errors.cardName ? 'error' : ''}
-                        placeholder="John Doe"
+                        placeholder="Akshat Tiwari"
                       />
                       {errors.cardName && <span className="error-text">{errors.cardName}</span>}
                     </div>

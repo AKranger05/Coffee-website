@@ -122,13 +122,16 @@ const OrderTrackingPage = ({ onBackToHome, orderData }) => {
   }
 
   const getMapEmbedUrl = () => {
-    // Demo delivery route in Lucknow
+    // BBD University coordinates in Lucknow (origin point)
+    const bbdUniversityLat = 26.8560
+    const bbdUniversityLng = 80.9760
+    
+    // Customer delivery location (destination)
     const customerLat = 26.8467
     const customerLng = 80.9462
-    const storeLat = 26.8489
-    const storeLng = 80.9475
     
-    return `https://www.google.com/maps/embed?pb=!1m28!1m12!1m3!1d14276.416364889856!2d${storeLng}!3d${storeLat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m13!3e0!4m5!1s0x399be37eb0826741%3A0x34d9dd79cdeac7d8!2sLucknow%2C%20Uttar%20Pradesh!3m2!1d${storeLat}!2d${storeLng}!4m5!1s0x399be37eb0826741%3A0x34d9dd79cdeac7d8!2sLucknow%2C%20Uttar%20Pradesh!3m2!1d${customerLat}!2d${customerLng}!5e0!3m2!1sen!2sin!4v1635789012345!5m2!1sen!2sin`
+    // Google Maps embed URL with route from BBD University to customer location
+    return `https://www.google.com/maps/embed?pb=!1m28!1m12!1m3!1d14276.416364889856!2d${bbdUniversityLng}!3d${bbdUniversityLat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m13!3e0!4m5!1s0x399be30fb4c94c2d%3A0x1f6b1c0e8b5c7a9!2sbabu%20banarasi%20das%20university%20lucknow!3m2!1d${bbdUniversityLat}!2d${bbdUniversityLng}!4m5!1s0x399be37eb0826741%3A0x34d9dd79cdeac7d8!2sLucknow%2C%20Uttar%20Pradesh!3m2!1d${customerLat}!2d${customerLng}!5e0!3m2!1sen!2sin!4v1635789012345!5m2!1sen!2sin`
   }
 
   return (
@@ -203,7 +206,7 @@ const OrderTrackingPage = ({ onBackToHome, orderData }) => {
                 allowFullScreen=""
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
-                title="Delivery Route"
+                title="Delivery Route from BBD University"
               ></iframe>
               
               {currentStatus >= 3 && (
