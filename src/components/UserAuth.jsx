@@ -30,10 +30,11 @@ const UserAuth = ({ onLogin, onCancel }) => {
   const validateForm = () => {
     const newErrors = {}
 
+    const isEmployeeCode = /^EMP\d{4}$/i.test(formData.email.trim())
     if (!formData.email) {
-      newErrors.email = 'Email is required'
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Please enter a valid email'
+      newErrors.email = 'Email or Employee Code is required'
+    } else if (!isEmployeeCode && !/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = 'Enter a valid email or EMP code'
     }
 
     if (!formData.password) {
@@ -71,23 +72,48 @@ const UserAuth = ({ onLogin, onCancel }) => {
       'Raj@yahoo.com': { password: 'brew789', name: 'Raj' },
       'Vivek@gmail.com': { password: 'latte123', name: 'Vivek' }
     }
+    const demoEmployeeCodes = {
+      'EMP1001': 'admin123',
+      'EMP1002': 'manager456', 
+      'EMP1003': 'barista789',
+      'EMP1004': 'kitchen123',
+      'EMP1005': 'delivery456'
+    }
 
     if (isLogin) {
-      const demoUser = demoUsers[formData.email]
-      if (demoUser && demoUser.password === formData.password) {
-        const userData = {
-          id: Date.now(),
-          type: 'user',
-          name: demoUser.name,
-          email: formData.email,
-          loginTime: new Date().toISOString()
+      const isEmployeeCode = /^EMP\d{4}$/i.test(formData.email.trim())
+      if (isEmployeeCode) {
+        const code = formData.email.trim().toUpperCase()
+        if (demoEmployeeCodes[code] === formData.password) {
+          const employeeData = {
+            id: Date.now(),
+            type: 'employee',
+            employeeName: 'Employee',
+            employeeCode: code,
+            department: 'Unknown',
+            loginTime: new Date().toISOString()
+          }
+          onLogin(employeeData)
+        } else {
+          setErrors({ email: 'Invalid employee code or password', password: 'Invalid employee code or password' })
         }
-        onLogin(userData)
       } else {
-        setErrors({ 
-          email: 'Invalid email or password',
-          password: 'Invalid email or password'
-        })
+        const demoUser = demoUsers[formData.email]
+        if (demoUser && demoUser.password === formData.password) {
+          const userData = {
+            id: Date.now(),
+            type: 'user',
+            name: demoUser.name,
+            email: formData.email,
+            loginTime: new Date().toISOString()
+          }
+          onLogin(userData)
+        } else {
+          setErrors({ 
+            email: 'Invalid email or password',
+            password: 'Invalid email or password'
+          })
+        }
       }
     } else {
       setTimeout(() => {
@@ -193,11 +219,21 @@ const UserAuth = ({ onLogin, onCancel }) => {
               fontSize: '0.85rem',
               color: 'rgba(255, 255, 255, 0.8)'
             }}>
-              <strong style={{color: '#ff6b6b'}}>Demo User Accounts:</strong><br/>
-              Akshat@gmail.com / user123<br/>
-              Shivang@gmail.com / coffee456<br/>
-              Raj@yahoo.com / brew789<br/>
-              Vivek@gmail.com / latte123
+              <div style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:'1rem'}}>
+                <div>
+                  <strong style={{color: '#ff6b6b'}}>Demo Users</strong><br/>
+                  Akshat@gmail.com / user123<br/>
+                  Shivang@gmail.com / coffee456<br/>
+                  Raj@yahoo.com / brew789<br/>
+                  Vivek@gmail.com / latte123
+                </div>
+                <div>
+                  <strong style={{color: '#667eea'}}>Demo Employees</strong><br/>
+                  EMP1001 / admin123<br/>
+                  EMP1002 / manager456<br/>
+                  EMP1003 / barista789
+                </div>
+              </div>
             </div>
           )}
 
@@ -231,10 +267,10 @@ const UserAuth = ({ onLogin, onCancel }) => {
 
             <div>
               <label style={{ color: 'rgba(255, 255, 255, 0.9)', fontWeight: 500, fontSize: '0.9rem', marginBottom: '0.5rem', display: 'block' }}>
-                Email Address
+                Email or Employee Code
               </label>
               <input
-                type="email"
+                type="text"
                 name="email"
                 value={formData.email}
                 onChange={handleInputChange}
@@ -249,7 +285,7 @@ const UserAuth = ({ onLogin, onCancel }) => {
                   backdropFilter: 'blur(20px)',
                   boxSizing: 'border-box'
                 }}
-                placeholder="Enter your email"
+                placeholder="Enter email or EMP code (e.g., EMP1001)"
               />
               {errors.email && <span style={{ color: '#ff4757', fontSize: '0.8rem', marginTop: '0.25rem', display: 'block' }}>{errors.email}</span>}
             </div>

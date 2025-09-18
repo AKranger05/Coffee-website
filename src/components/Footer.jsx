@@ -1,7 +1,7 @@
 import React from 'react'
 import { UserCheck } from 'lucide-react'
 
-const Footer = ({ onEmployeeAuth, onEmployeeAuthRequired }) => {
+const Footer = ({ onEmployeeAuth, onEmployeeAuthRequired, isEmployeeLoggedIn }) => {
   const handleLinkClick = (e, pageName) => {
     e.preventDefault()
     alert(`${pageName} page will be added soon!`)
@@ -52,54 +52,38 @@ const Footer = ({ onEmployeeAuth, onEmployeeAuthRequired }) => {
           </ul>
         </div>
         
-        <div className="footer-section">
-          <h3>For Employees</h3>
-          <ul>
-            <li>
-              <a 
-                href="#dashboard" 
-                onClick={handleEmployeeDashboardClick}
-              >
-                Dashboard
-              </a>
-            </li>
-            <li>
-              <a 
-                href="#menu-management" 
-                onClick={handleMenuManagementClick}
-              >
-                Menu management
-              </a>
-            </li>
-            <li>
-              <a 
-                href="#order-management" 
-                onClick={handleOrderManagementClick}
-              >
-                Order management
-              </a>
-            </li>
-            <li>
-              <a 
-                href="#analytics" 
-                onClick={handleAnalyticsClick}
-              >
-                Analytics
-              </a>
-            </li>
-          </ul>
-          
-          {/* Employee Auth Button */}
-          <div className="business-auth-section">
-            <button 
-              className="business-auth-btn" 
-              onClick={onEmployeeAuth}
-            >
-              <UserCheck size={18} />
-              <span>Employee Login</span>
-            </button>
+        {isEmployeeLoggedIn && (
+          <div className="footer-section">
+            <h3>For Employees</h3>
+            <ul>
+              <li>
+                <a 
+                  href="#menu-management" 
+                  onClick={handleMenuManagementClick}
+                >
+                  Menu management
+                </a>
+              </li>
+              <li>
+                <a 
+                  href="#order-management" 
+                  onClick={handleOrderManagementClick}
+                >
+                  Order management
+                </a>
+              </li>
+              <li>
+                <a 
+                  href="#analytics" 
+                  onClick={handleAnalyticsClick}
+                >
+                  Analytics
+                </a>
+              </li>
+            </ul>
           </div>
-        </div>
+        )}
+        
       </div>
       
       <div className="footer-bottom">

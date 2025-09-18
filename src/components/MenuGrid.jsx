@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Plus, Minus } from 'lucide-react'
+import '../styles/menu/menu-grid.css'
 
 const MenuGrid = ({ onCoffeeClick, onAddToCart, cartItems, onUpdateQuantity }) => {
   const [visibleCards, setVisibleCards] = useState([])
@@ -10,63 +11,72 @@ const MenuGrid = ({ onCoffeeClick, onAddToCart, cartItems, onUpdateQuantity }) =
       name: "Classic Espresso", 
       description: "Rich, bold, and intense. Our signature espresso shot with notes of dark chocolate and caramel that awakens your senses.", 
       price: "₹250", 
-      emoji: "☕"
+      emoji: "☕",
+      imageUrl: "/espresso.png"
     },
     { 
       id: 2, 
       name: "Smooth Americano", 
       description: "A perfect balance of strength and smoothness. Espresso with hot water for all-day sipping pleasure.", 
       price: "₹350", 
-      emoji: "☕"
+      emoji: "☕",
+      imageUrl: "/Smooth americano.png"
     },
     { 
       id: 3, 
       name: "Creamy Latte", 
       description: "Silky steamed milk meets our premium espresso for a luxurious coffee experience that melts in your mouth.", 
       price: "₹500", 
-      emoji: "🥛"
+      emoji: "🥛",
+      imageUrl: "/Creamy latte.png"
     },
     { 
       id: 4, 
       name: "Frothy Cappuccino", 
       description: "Traditional Italian cappuccino with the perfect foam-to-coffee ratio and rich, authentic flavor.", 
       price: "₹450", 
-      emoji: "☕"
+      emoji: "☕",
+      imageUrl: "/Frothy Cappuchino.png"
     },
     { 
       id: 5, 
       name: "Decadent Mocha", 
       description: "Rich chocolate syrup meets premium coffee in this indulgent sweet treat that satisfies every craving.", 
       price: "₹500", 
-      emoji: "🍫"
+      emoji: "🍫",
+      imageUrl: "/Decadent Mocha.png"
     },
     { 
       id: 6, 
       name: "Elegant Macchiato", 
       description: "Espresso marked with a dollop of foamed milk. Simple perfection in every carefully crafted sip.", 
       price: "₹450", 
-      emoji: "⭐"
+      emoji: "⭐",
+      imageUrl: "/Elegant Macchiato.png"
     },
     { 
       id: 7, 
       name: "Cold Brew", 
       description: "Smooth, refreshing, and naturally sweet. Perfect iced coffee for hot summer days and chill moments.", 
       price: "₹350", 
-      emoji: "🧊"
+      emoji: "🧊",
+      imageUrl: "/Cold brew.png"
     },
     { 
       id: 8, 
       name: "Iced Frappé", 
       description: "Blended iced coffee with whipped cream and rich flavor. A cool refreshing treat for any time of day.", 
       price: "₹550", 
-      emoji: "🥤"
+      emoji: "🥤",
+      imageUrl: "/Iced Frappe.png"
     },
     { 
       id: 9, 
       name: "Flat White", 
       description: "Smooth microfoam and double shot espresso. A modern coffee classic from down under with perfect balance.", 
       price: "₹450", 
-      emoji: "☕"
+      emoji: "☕",
+      imageUrl: "/Flat White.png"
     }
   ]
 
@@ -131,7 +141,7 @@ const MenuGrid = ({ onCoffeeClick, onAddToCart, cartItems, onUpdateQuantity }) =
               onClick={() => handleCardClick(item.name)}
             >
               <div className="coffee-image">
-                <span className="coffee-emoji">{item.emoji}</span>
+                <img className="coffee-photo" src={item.imageUrl} alt={`${item.name} image`} loading="lazy" />
               </div>
               <div className="coffee-info">
                 <h3>{item.name}</h3>
