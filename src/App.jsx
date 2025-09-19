@@ -20,6 +20,7 @@ import FlatWhite from './components/coffee/FlatWhite'
 import MenuManagement from './components/employee/MenuManagement'
 import OrderManagement from './components/employee/OrderManagement'
 import AnalyticsPage from './components/employee/Analytics'
+import TeamPage from './components/TeamPage'
 import './App.css'
 
 function App() {
@@ -399,7 +400,7 @@ function App() {
           />
         )
       }
-      case 'coffee-iced-frappe': {
+      case 'coffee-iced-frappé': {
         const existing = cartItems.find(ci => ci.id === 8)
         const qty = existing ? existing.quantity : 0
         return (
@@ -482,6 +483,10 @@ function App() {
         return (
           <AnalyticsPage onBack={() => setCurrentPage('home')} />
         )
+      case 'team':
+        return (
+          <TeamPage onBack={() => setCurrentPage('home')} />
+        )
       case 'home':
       default:
         return (
@@ -500,6 +505,7 @@ function App() {
               onEmployeeAuth={handleEmployeeAuth} 
               onEmployeeAuthRequired={handleEmployeeAuthRequiredAction}
               isEmployeeLoggedIn={isEmployeeLoggedIn}
+              onNavigate={handleNavigation}
             />
           </>
         )

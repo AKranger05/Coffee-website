@@ -1,10 +1,37 @@
-import React from 'react'
-import { UserCheck } from 'lucide-react'
+import React, { useState } from 'react'
+import { UserCheck, Check } from 'lucide-react'
 
-const Footer = ({ onEmployeeAuth, onEmployeeAuthRequired, isEmployeeLoggedIn }) => {
+const Footer = ({ onEmployeeAuth, onEmployeeAuthRequired, isEmployeeLoggedIn, onNavigate }) => {
+  const [emailCopied, setEmailCopied] = useState(false)
+
   const handleLinkClick = (e, pageName) => {
     e.preventDefault()
-    alert(`${pageName} page will be added soon!`)
+    if (pageName === 'Learn about the team') {
+      onNavigate('team')
+    } else if (pageName === 'Contact us') {
+      handleEmailCopy()
+    } else {
+      alert(`${pageName} page will be added soon!`)
+    }
+  }
+
+  const handleEmailCopy = async () => {
+    const emails = 'brewcraft2025@outlook.com, akshat1972005@gmail.com'
+    try {
+      await navigator.clipboard.writeText(emails)
+      setEmailCopied(true)
+      setTimeout(() => setEmailCopied(false), 3000) // Hide after 3 seconds
+    } catch (err) {
+      // Fallback for older browsers
+      const textArea = document.createElement('textarea')
+      textArea.value = emails
+      document.body.appendChild(textArea)
+      textArea.select()
+      document.execCommand('copy')
+      document.body.removeChild(textArea)
+      setEmailCopied(true)
+      setTimeout(() => setEmailCopied(false), 3000)
+    }
   }
 
   const handleEmployeeDashboardClick = (e) => {
@@ -89,6 +116,14 @@ const Footer = ({ onEmployeeAuth, onEmployeeAuthRequired, isEmployeeLoggedIn }) 
       <div className="footer-bottom">
         <p>&copy; 2025 BREW CRAFT Coffee. All rights reserved. Crafted with ❤️ for coffee lovers worldwide.</p>
       </div>
+      
+      {/* Email Copied Indicator */}
+      {emailCopied && (
+        <div className="email-copied-indicator">
+          <Check size={20} />
+          <span>Emails copied to clipboard!</span>
+        </div>
+      )}
     </footer>
   )
 }

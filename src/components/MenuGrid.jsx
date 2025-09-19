@@ -66,7 +66,7 @@ const MenuGrid = ({ onCoffeeClick, onAddToCart, cartItems, onUpdateQuantity }) =
       id: 8, 
       name: "Iced Frappé", 
       description: "Blended iced coffee with whipped cream and rich flavor. A cool refreshing treat for any time of day.", 
-      price: "₹550", 
+      price: "₹320", 
       emoji: "🥤",
       imageUrl: "/Iced Frappe.png"
     },
