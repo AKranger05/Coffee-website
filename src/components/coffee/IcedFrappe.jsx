@@ -27,49 +27,41 @@ const IcedFrappe = ({ onBack, onAddToCart, onUpdateQuantity, currentQuantity }) 
           </div>
           <div className="coffee-info-card">
             <h2>About this coffee</h2>
-            <p>A refreshing blended coffee drink perfect for hot days. Made with premium coffee, ice, milk, and a touch of sweetness, then topped with whipped cream for the ultimate indulgence.</p>
-            
-            <div className="coffee-details">
-              <div className="detail-item">
-                <span className="detail-label">Taste Profile:</span>
-                <span className="detail-value">Sweet, Creamy, Refreshing</span>
+            <p>
+              A refreshing blended coffee drink perfect for hot days. Made with premium coffee, ice, milk, and a touch of sweetness, then topped with whipped cream for the ultimate indulgence.
+            </p>
+
+            <div className="coffee-meta">
+              <div className="meta-item">
+                <span className="meta-label">Taste Profile</span>
+                <span className="meta-value">Sweet, Creamy, Refreshing</span>
               </div>
-              <div className="detail-item">
-                <span className="detail-label">Temperature:</span>
-                <span className="detail-value">Iced</span>
+              <div className="meta-item">
+                <span className="meta-label">Temperature</span>
+                <span className="meta-value">Iced</span>
               </div>
-              <div className="detail-item">
-                <span className="detail-label">Caffeine Level:</span>
-                <span className="detail-value">Medium</span>
-              </div>
-              <div className="detail-item">
-                <span className="detail-label">Best For:</span>
-                <span className="detail-value">Hot summer days, Sweet cravings</span>
+              <div className="meta-item">
+                <span className="meta-label">Size</span>
+                <span className="meta-value">Large (500ml)</span>
               </div>
             </div>
 
-            <div className="coffee-actions">
-              <div className="quantity-controls">
-                <button 
-                  className="quantity-btn" 
-                  onClick={() => onUpdateQuantity(Math.max(0, currentQuantity - 1))}
-                >
-                  <Minus size={16} />
-                </button>
-                <span className="quantity-display">{currentQuantity}</span>
-                <button 
-                  className="quantity-btn" 
-                  onClick={() => onUpdateQuantity(currentQuantity + 1)}
-                >
-                  <Plus size={16} />
-                </button>
-              </div>
-              <button 
-                className="add-to-cart-btn"
-                onClick={() => onAddToCart(item)}
-              >
-                Add to Cart - {item.price}
-              </button>
+            <div className="coffee-purchase">
+              <div className="coffee-price">{item.price}</div>
+              {currentQuantity > 0 ? (
+                <div className="quantity-controls">
+                  <button className="quantity-btn minus" onClick={() => onUpdateQuantity(item.id, -1)}><Minus size={16} /></button>
+                  <span className="quantity-display">{currentQuantity}</span>
+                  <button className="quantity-btn plus" onClick={() => onUpdateQuantity(item.id, 1)}><Plus size={16} /></button>
+                </div>
+              ) : (
+                <button className="order-now-btn" onClick={() => onAddToCart(item)}><span>Add to Cart</span></button>
+              )}
+            </div>
+
+            <div className="brew-tips">
+              <h3>Barista Tips</h3>
+              <p>Perfect for hot summer days! Best enjoyed immediately after preparation to maintain the ideal temperature and texture. The whipped cream adds a luxurious finish to this refreshing treat.</p>
             </div>
           </div>
         </div>
