@@ -17,6 +17,7 @@ import ElegantMacchiato from './components/coffee/ElegantMacchiato'
 import ColdBrew from './components/coffee/ColdBrew'
 import IcedFrappe from './components/coffee/IcedFrappe'
 import FlatWhite from './components/coffee/FlatWhite'
+import CustomCoffee from './components/coffee/CustomCoffee'
 import MenuManagement from './components/employee/MenuManagement'
 import OrderManagement from './components/employee/OrderManagement'
 import AnalyticsPage from './components/employee/Analytics'
@@ -34,6 +35,10 @@ function App() {
   const [orderHistory, setOrderHistory] = useState([])
   const [currentOrder, setCurrentOrder] = useState(null)
   const [isMobile, setIsMobile] = useState(false)
+  const [menuManagementData, setMenuManagementData] = useState({
+    customMenu: [],
+    hiddenItems: []
+  })
   const menuRef = useRef(null)
 
   useEffect(() => {
@@ -60,6 +65,14 @@ function App() {
     // Load current order if exists
     const savedCurrentOrder = JSON.parse(localStorage.getItem('brewCraftCurrentOrder') || 'null')
     setCurrentOrder(savedCurrentOrder)
+
+    // Load menu management data
+    const savedCustomMenu = JSON.parse(localStorage.getItem('brewCraftMenu') || '[]')
+    const savedHiddenItems = JSON.parse(localStorage.getItem('brewCraftHiddenItems') || '[]')
+    setMenuManagementData({
+      customMenu: savedCustomMenu,
+      hiddenItems: savedHiddenItems
+    })
   }, [])
 
   // Mobile detection
@@ -92,6 +105,12 @@ function App() {
       localStorage.removeItem('brewCraftCurrentOrder')
     }
   }, [currentOrder])
+
+  // Save menu management data to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem('brewCraftMenu', JSON.stringify(menuManagementData.customMenu))
+    localStorage.setItem('brewCraftHiddenItems', JSON.stringify(menuManagementData.hiddenItems))
+  }, [menuManagementData])
 
   useEffect(() => {
     if (currentPage === 'home') {
@@ -262,6 +281,19 @@ function App() {
       const price = parseInt(item.price.replace('₹', ''))
       return total + (price * item.quantity)
     }, 0)
+  }
+
+  const getCustomCoffeeData = (coffeeId) => {
+    return menuManagementData.customMenu.find(item => item.id === parseInt(coffeeId))
+  }
+
+  // Menu management functions
+  const updateCustomMenu = (newMenu) => {
+    setMenuManagementData(prev => ({ ...prev, customMenu: newMenu }))
+  }
+
+  const updateHiddenItems = (newHiddenItems) => {
+    setMenuManagementData(prev => ({ ...prev, hiddenItems: newHiddenItems }))
   }
 
   const handleUserLogin = (userData) => {
@@ -486,7 +518,13 @@ function App() {
         )
       case 'menu-management':
         return (
-          <MenuManagement onBack={() => handleNavigation('home')} />
+          <MenuManagement 
+            onBack={() => handleNavigation('home')}
+            customMenu={menuManagementData.customMenu}
+            hiddenItems={menuManagementData.hiddenItems}
+            onUpdateCustomMenu={updateCustomMenu}
+            onUpdateHiddenItems={updateHiddenItems}
+          />
         )
       case 'order-management':
         return (
@@ -501,7 +539,6 @@ function App() {
           <TeamPage onBack={() => handleNavigation('home')} />
         )
       case 'home':
-      default:
         return (
           <>
             <Hero onExploreClick={scrollToMenu} />
@@ -512,6 +549,50 @@ function App() {
                 onAddToCart={addToCart}
                 cartItems={cartItems}
                 onUpdateQuantity={updateCartQuantity}
+                customMenu={menuManagementData.customMenu}
+                hiddenItems={menuManagementData.hiddenItems}
+              />
+            )}
+            <Footer 
+              onEmployeeAuth={handleEmployeeAuth} 
+              onEmployeeAuthRequired={handleEmployeeAuthRequiredAction}
+              isEmployeeLoggedIn={isEmployeeLoggedIn}
+              onNavigate={handleNavigation}
+            />
+          </>
+        )
+      default:
+        // Handle custom coffee pages
+        if (currentPage.startsWith('coffee-custom-')) {
+          const coffeeId = currentPage.replace('coffee-custom-', '')
+          const coffeeData = getCustomCoffeeData(coffeeId)
+          const existing = cartItems.find(ci => ci.id === parseInt(coffeeId))
+          const qty = existing ? existing.quantity : 0
+          
+          return (
+            <CustomCoffee
+              coffeeData={coffeeData}
+              onBack={() => handleNavigation('home')}
+              onAddToCart={addToCart}
+              onUpdateQuantity={updateCartQuantity}
+              currentQuantity={qty}
+            />
+          )
+        }
+        
+        // Default fallback to home
+        return (
+          <>
+            <Hero onExploreClick={scrollToMenu} />
+            <div ref={menuRef} style={{height: '1px', position: 'relative'}}></div>
+            {isMenuVisible && (
+              <MenuGrid 
+                onCoffeeClick={handleAuthRequiredAction}
+                onAddToCart={addToCart}
+                cartItems={cartItems}
+                onUpdateQuantity={updateCartQuantity}
+                customMenu={menuManagementData.customMenu}
+                hiddenItems={menuManagementData.hiddenItems}
               />
             )}
             <Footer 
