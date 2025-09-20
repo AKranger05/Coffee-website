@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import Header from './components/Header'
 import Hero from './components/Hero'
 import MenuGrid from './components/MenuGrid'
@@ -33,6 +33,7 @@ function App() {
   const [cartAnimation, setCartAnimation] = useState({ show: false, count: 0 })
   const [orderHistory, setOrderHistory] = useState([])
   const [currentOrder, setCurrentOrder] = useState(null)
+  const [isMobile, setIsMobile] = useState(false)
   const menuRef = useRef(null)
 
   useEffect(() => {
@@ -59,6 +60,18 @@ function App() {
     // Load current order if exists
     const savedCurrentOrder = JSON.parse(localStorage.getItem('brewCraftCurrentOrder') || 'null')
     setCurrentOrder(savedCurrentOrder)
+  }, [])
+
+  // Mobile detection
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768)
+    }
+    
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    
+    return () => window.removeEventListener('resize', checkMobile)
   }, [])
 
   // Save cart to localStorage whenever it changes
@@ -119,14 +132,14 @@ function App() {
   const handleAuthRequiredAction = (destination) => {
     if (destination === 'cart') {
       // Cart is accessible to everyone
-      setCurrentPage('cart')
+      handleNavigation('cart')
       return
     }
 
     if (destination === 'tracking') {
       // Check if user has a current order to track
       if (currentOrder) {
-        setCurrentPage('tracking')
+        handleNavigation('tracking')
         return
       } else {
         alert('No active order to track. Place an order first!')
@@ -137,25 +150,25 @@ function App() {
     if (destination === 'checkout' && !isUserLoggedIn) {
       // Checkout requires authentication
       setPendingDestination(destination)
-      setCurrentPage('auth')
+      handleNavigation('auth')
       return
     }
 
     // Handle coffee detail pages (no auth required)
     if (destination && destination.startsWith('coffee-')) {
-      setCurrentPage(destination)
+      handleNavigation(destination)
       return
     }
 
     if (isUserLoggedIn) {
       // User is logged in, proceed to destination
       if (destination === 'cart') {
-        setCurrentPage('cart')
+        handleNavigation('cart')
       } else if (destination === 'checkout') {
-        setCurrentPage('checkout')
+        handleNavigation('checkout')
       } else if (destination === 'tracking') {
         if (currentOrder) {
-          setCurrentPage('tracking')
+          handleNavigation('tracking')
         } else {
           alert('No active order to track. Place an order first!')
         }
@@ -165,18 +178,18 @@ function App() {
     } else {
       // User not logged in, save destination and show auth
       setPendingDestination(destination)
-      setCurrentPage('auth')
+      handleNavigation('auth')
     }
   }
 
   const handleEmployeeAuthRequiredAction = (destination) => {
     if (isEmployeeLoggedIn) {
       // Employee is logged in, proceed to destination
-      setCurrentPage(destination)
+      handleNavigation(destination)
     } else {
       // Employee not logged in, show employee auth
       alert('Please sign in as an employee to access this feature')
-      setCurrentPage('employeeAuth')
+      handleNavigation('employeeAuth')
     }
   }
 
@@ -281,7 +294,7 @@ function App() {
         setPendingDestination(null)
       }
     }
-    setCurrentPage('home')
+    handleNavigation('home')
   }
 
   const handleUserLogout = () => {
@@ -290,11 +303,11 @@ function App() {
     localStorage.removeItem('brewCraftUser')
     localStorage.removeItem('brewCraftEmployee')
     // Keep cart items when logging out
-    setCurrentPage('home')
+    handleNavigation('home')
   }
 
   const handleEmployeeAuth = () => {
-    setCurrentPage('employeeAuth')
+    handleNavigation('employeeAuth')
   }
 
   const handleOrderComplete = (orderData) => {
@@ -321,7 +334,7 @@ function App() {
         const qty = existing ? existing.quantity : 0
         return (
           <ClassicEspresso
-            onBack={() => setCurrentPage('home')}
+            onBack={() => handleNavigation('home')}
             onAddToCart={addToCart}
             onUpdateQuantity={updateCartQuantity}
             currentQuantity={qty}
@@ -333,7 +346,7 @@ function App() {
         const qty = existing ? existing.quantity : 0
         return (
           <SmoothAmericano
-            onBack={() => setCurrentPage('home')}
+            onBack={() => handleNavigation('home')}
             onAddToCart={addToCart}
             onUpdateQuantity={updateCartQuantity}
             currentQuantity={qty}
@@ -345,7 +358,7 @@ function App() {
         const qty = existing ? existing.quantity : 0
         return (
           <CreamyLatte
-            onBack={() => setCurrentPage('home')}
+            onBack={() => handleNavigation('home')}
             onAddToCart={addToCart}
             onUpdateQuantity={updateCartQuantity}
             currentQuantity={qty}
@@ -357,7 +370,7 @@ function App() {
         const qty = existing ? existing.quantity : 0
         return (
           <FrothyCappuccino
-            onBack={() => setCurrentPage('home')}
+            onBack={() => handleNavigation('home')}
             onAddToCart={addToCart}
             onUpdateQuantity={updateCartQuantity}
             currentQuantity={qty}
@@ -369,7 +382,7 @@ function App() {
         const qty = existing ? existing.quantity : 0
         return (
           <DecadentMocha
-            onBack={() => setCurrentPage('home')}
+            onBack={() => handleNavigation('home')}
             onAddToCart={addToCart}
             onUpdateQuantity={updateCartQuantity}
             currentQuantity={qty}
@@ -381,7 +394,7 @@ function App() {
         const qty = existing ? existing.quantity : 0
         return (
           <ElegantMacchiato
-            onBack={() => setCurrentPage('home')}
+            onBack={() => handleNavigation('home')}
             onAddToCart={addToCart}
             onUpdateQuantity={updateCartQuantity}
             currentQuantity={qty}
@@ -393,7 +406,7 @@ function App() {
         const qty = existing ? existing.quantity : 0
         return (
           <ColdBrew
-            onBack={() => setCurrentPage('home')}
+            onBack={() => handleNavigation('home')}
             onAddToCart={addToCart}
             onUpdateQuantity={updateCartQuantity}
             currentQuantity={qty}
@@ -405,7 +418,7 @@ function App() {
         const qty = existing ? existing.quantity : 0
         return (
           <IcedFrappe
-            onBack={() => setCurrentPage('home')}
+            onBack={() => handleNavigation('home')}
             onAddToCart={addToCart}
             onUpdateQuantity={updateCartQuantity}
             currentQuantity={qty}
@@ -417,7 +430,7 @@ function App() {
         const qty = existing ? existing.quantity : 0
         return (
           <FlatWhite
-            onBack={() => setCurrentPage('home')}
+            onBack={() => handleNavigation('home')}
             onAddToCart={addToCart}
             onUpdateQuantity={updateCartQuantity}
             currentQuantity={qty}
@@ -430,7 +443,7 @@ function App() {
             onLogin={handleUserLogin}
             onCancel={() => {
               setPendingDestination(null)
-              setCurrentPage('home')
+              handleNavigation('home')
             }}
           />
         )
@@ -438,7 +451,7 @@ function App() {
         return (
           <UserAuth 
             onLogin={handleUserLogin}
-            onCancel={() => setCurrentPage('home')}
+            onCancel={() => handleNavigation('home')}
           />
         )
       case 'cart':
@@ -448,7 +461,7 @@ function App() {
             onUpdateQuantity={updateCartQuantity}
             onRemoveItem={removeFromCart}
             onClearCart={clearCart}
-            onBackToMenu={() => setCurrentPage('home')}
+            onBackToMenu={() => handleNavigation('home')}
             onCheckout={() => handleAuthRequiredAction('checkout')}
             isUserLoggedIn={isUserLoggedIn}
             cartTotal={getCartTotal()}
@@ -467,25 +480,25 @@ function App() {
       case 'tracking':
         return (
           <OrderTrackingPage
-            onBackToHome={() => setCurrentPage('home')}
+            onBackToHome={() => handleNavigation('home')}
             orderData={currentOrder}
           />
         )
       case 'menu-management':
         return (
-          <MenuManagement onBack={() => setCurrentPage('home')} />
+          <MenuManagement onBack={() => handleNavigation('home')} />
         )
       case 'order-management':
         return (
-          <OrderManagement onBack={() => setCurrentPage('home')} />
+          <OrderManagement onBack={() => handleNavigation('home')} />
         )
       case 'analytics':
         return (
-          <AnalyticsPage onBack={() => setCurrentPage('home')} />
+          <AnalyticsPage onBack={() => handleNavigation('home')} />
         )
       case 'team':
         return (
-          <TeamPage onBack={() => setCurrentPage('home')} />
+          <TeamPage onBack={() => handleNavigation('home')} />
         )
       case 'home':
       default:
